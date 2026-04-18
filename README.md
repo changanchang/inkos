@@ -1,3 +1,12 @@
+---
+title: InkOS Studio
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 <p align="center">
   <h1 align="center">InkOS Studio</h1>
   <p align="center">InkOS 的可视化 Web 界面 - 自动化小说写作管理平台</p>
