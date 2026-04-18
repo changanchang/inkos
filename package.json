@@ -1,0 +1,40 @@
+{
+  "name": "inkos-studio",
+  "version": "0.1.0",
+  "description": "InkOS 的可视化 Web 界面 - 自动化小说写作管理平台",
+  "type": "module",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "build": "echo 'No build step required'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/changanchang/inkos-studio.git"
+  },
+  "keywords": [
+    "inkos",
+    "novel",
+    "writing",
+    "ai",
+    "creative-writing",
+    "fiction"
+  ],
+  "author": "changanchang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/changanchang/inkos-studio/issues"
+  },
+  "homepage": "https://github.com/changanchang/inkos-studio#readme",
+  "dependencies": {
+    "adm-zip": "^0.5.17",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "multer": "^2.1.1",
+    "ws": "^8.14.2",
+    "@actalk/inkos": "latest"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

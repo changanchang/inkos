@@ -1,0 +1,3264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InkOS Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* ═══════ Premium Dark Theme — Obsidian Noir ═══════ */
+      --bg-base: #06080f;
+      --bg-gradient: radial-gradient(ellipse 120% 80% at 10% 0%, rgba(99,102,241,0.12) 0%, transparent 50%),
+                     radial-gradient(ellipse 80% 60% at 90% 100%, rgba(139,92,246,0.08) 0%, transparent 50%),
+                     radial-gradient(ellipse 60% 60% at 50% 50%, #0a0d18 0%, #06080f 100%);
+      --glass-bg: rgba(14, 17, 30, 0.55);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.06);
+      --glass-shadow: 0 4px 24px rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.03) inset;
+
+      --primary-accent: #818cf8;
+      --primary-gradient: linear-gradient(135deg, #6366f1, #a855f7);
+      --primary-glow: rgba(129, 140, 248, 0.25);
+      --primary-glow-strong: rgba(129, 140, 248, 0.45);
+
+      --text-main: #eef0f6;
+      --text-muted: #6b7694;
+
+      --nav-hover: rgba(255, 255, 255, 0.04);
+      --nav-active-bg: rgba(129, 140, 248, 0.1);
+
+      --surface-element: rgba(14, 17, 30, 0.5);
+      --surface-hover: rgba(255, 255, 255, 0.025);
+
+      --input-bg: rgba(10, 13, 24, 0.6);
+      --input-border: rgba(255, 255, 255, 0.07);
+      --input-focus-bg: rgba(14, 17, 30, 0.8);
+
+      --success-text: #34d399;
+      --success-bg: rgba(52, 211, 153, 0.1);
+      --success-border: rgba(52, 211, 153, 0.2);
+
+      --warning-text: #fbbf24;
+      --warning-bg: rgba(251, 191, 36, 0.1);
+      --warning-border: rgba(251, 191, 36, 0.2);
+
+      --danger-text: #fb7185;
+      --danger-bg: rgba(251, 113, 133, 0.1);
+      --danger-border: rgba(251, 113, 133, 0.2);
+
+      --info-text: #818cf8;
+      --info-bg: rgba(129, 140, 248, 0.1);
+      --info-border: rgba(129, 140, 248, 0.2);
+
+      --terminal-bg: rgba(4, 6, 12, 0.9);
+
+      --scroll-thumb: rgba(255,255,255,0.07);
+      --scroll-thumb-hover: rgba(255,255,255,0.14);
+
+      --modal-overlay: rgba(2, 4, 8, 0.75);
+
+      --card-highlight: rgba(255,255,255,0.03);
+      --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+      --transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    [data-theme="light"] {
+      /* ═══════ Premium Light Theme — Frosted Ivory ═══════ */
+      --bg-base: #f8f9fc;
+      --bg-gradient: radial-gradient(ellipse 120% 80% at 10% 0%, rgba(99,102,241,0.06) 0%, transparent 50%),
+                     radial-gradient(ellipse 80% 60% at 90% 100%, rgba(139,92,246,0.04) 0%, transparent 50%),
+                     linear-gradient(180deg, #f0f2f8, #f8f9fc);
+      --glass-bg: rgba(255, 255, 255, 0.72);
+      --glass-border: 1px solid rgba(148, 163, 184, 0.15);
+      --glass-shadow: 0 4px 24px rgba(15, 23, 42, 0.05), 0 1px 0 rgba(255,255,255,0.8) inset;
+
+      --primary-accent: #6366f1;
+      --primary-gradient: linear-gradient(135deg, #4f46e5, #7c3aed);
+      --primary-glow: rgba(99, 102, 241, 0.18);
+      --primary-glow-strong: rgba(99, 102, 241, 0.35);
+
+      --text-main: #1a1e2e;
+      --text-muted: #64748b;
+
+      --nav-hover: rgba(15, 23, 42, 0.035);
+      --nav-active-bg: rgba(99, 102, 241, 0.07);
+
+      --surface-element: rgba(255, 255, 255, 0.8);
+      --surface-hover: rgba(255, 255, 255, 1);
+
+      --input-bg: rgba(241, 245, 249, 0.8);
+      --input-border: rgba(148, 163, 184, 0.25);
+      --input-focus-bg: #ffffff;
+
+      --success-text: #059669;
+      --success-bg: rgba(5, 150, 105, 0.07);
+      --success-border: rgba(5, 150, 105, 0.15);
+
+      --warning-text: #d97706;
+      --warning-bg: rgba(217, 119, 6, 0.07);
+      --warning-border: rgba(217, 119, 6, 0.15);
+
+      --danger-text: #dc2626;
+      --danger-bg: rgba(220, 38, 38, 0.07);
+      --danger-border: rgba(220, 38, 38, 0.15);
+
+      --info-text: #4f46e5;
+      --info-bg: rgba(79, 70, 229, 0.07);
+      --info-border: rgba(79, 70, 229, 0.15);
+
+      --terminal-bg: rgba(241, 245, 249, 0.95);
+
+      --scroll-thumb: rgba(15, 23, 42, 0.1);
+      --scroll-thumb-hover: rgba(15, 23, 42, 0.2);
+
+      --modal-overlay: rgba(15, 23, 42, 0.4);
+
+      --card-highlight: rgba(255,255,255,0.6);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-base);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow: hidden;
+      transition: background 0.5s var(--transition-smooth), color 0.5s var(--transition-smooth);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* ═══ Scrollbar ═══ */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { 
+      background: var(--scroll-thumb); 
+      border-radius: 20px;
+      transition: background 0.3s;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); }
+    
+    .app {
+      display: flex;
+      height: 100vh;
+      padding: 20px;
+      gap: 20px;
+      box-sizing: border-box;
+      position: relative;
+    }
+    
+    /* ═══ Sidebar ═══ */
+    .sidebar {
+      width: 280px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: var(--glass-border);
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--glass-shadow);
+      z-index: 100;
+      transition: all 0.5s var(--transition-smooth);
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Sidebar Ambient Light */
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: -50px; left: -50px;
+      width: 150px; height: 150px;
+      background: var(--primary-accent);
+      filter: blur(80px);
+      opacity: 0.15;
+      pointer-events: none;
+    }
+    
+    .logo {
+      padding: 32px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+    
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--primary-gradient);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 8px 16px var(--primary-glow);
+      transition: transform 0.5s var(--transition-bounce);
+    }
+    
+    .sidebar:hover .logo-icon {
+      transform: rotate(10deg) scale(1.05);
+    }
+    
+    .logo h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .nav {
+      flex: 1;
+      padding: 10px 16px;
+      overflow-y: auto;
+    }
+    
+    .nav-item {
+      padding: 14px 18px;
+      margin-bottom: 6px;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.3s var(--transition-smooth);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid transparent;
+    }
+    
+    .nav-item:hover {
+      background: var(--nav-hover);
+      color: var(--text-main);
+      transform: translateX(6px);
+      border-color: rgba(255, 255, 255, 0.03);
+    }
+    
+    .nav-item.active {
+      background: var(--nav-active-bg);
+      color: var(--text-main);
+      font-weight: 600;
+      border-color: rgba(129, 140, 248, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      right: 12px;
+      width: 4px;
+      height: 4px;
+      background: var(--primary-accent);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary-accent);
+    }
+    
+    .nav-icon {
+      font-size: 18px;
+      transition: all 0.3s var(--transition-bounce);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+    }
+    
+    .nav-item.active .nav-icon {
+      transform: scale(1.2);
+      filter: drop-shadow(0 0 5px var(--primary-glow));
+    }
+    
+    /* ═══ Main Content Container ═══ */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--glass-bg);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: var(--glass-border);
+      border-radius: 24px;
+      box-shadow: var(--glass-shadow);
+      z-index: 10;
+      transition: all 0.5s var(--transition-smooth);
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Ambient Glow Point */
+    .main::after {
+      content: '';
+      position: absolute;
+      bottom: -10%; left: 50%;
+      width: 60%; height: 40%;
+      background: var(--primary-accent);
+      filter: blur(120px);
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    
+    .header {
+      padding: 32px 40px;
+      border-bottom: var(--glass-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      position: relative;
+    }
+    
+    .header h2 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      color: var(--text-main);
+    }
+    
+    .theme-toggle {
+      background: var(--card-highlight);
+      border: var(--glass-border);
+      color: var(--text-main);
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s var(--transition-bounce);
+      font-size: 20px;
+    }
+    
+    .theme-toggle:hover {
+      transform: scale(1.1) rotate(-15deg);
+      background: var(--surface-hover);
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+    
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+      position: relative;
+      z-index: 10;
+    }
+    
+    /* ═══ Cards ═══ */
+    .card {
+      background: var(--card-highlight);
+      border: var(--glass-border);
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 28px;
+      transition: all 0.4s var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px -4px rgba(0,0,0,0.1);
+      /* Force GPU compositing — prevents Windows Chromium white-flash when
+         native <select> dropdown opens over a backdrop-filter parent */
+      isolation: isolate;
+      will-change: transform;
+    }
+    
+    .card:hover {
+      transform: translateY(-4px) scale(1.005);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 20px 40px -8px rgba(0,0,0,0.3);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Card Highlight Effect */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-main);
+    }
+    
+    /* ═══ Stats ═══ */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    
+    .stat-card {
+      background: var(--card-highlight);
+      border: var(--glass-border);
+      border-radius: 20px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.3s var(--transition-smooth);
+      position: relative;
+    }
+    
+    .stat-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--primary-accent);
+      transform: translateY(-4px);
+    }
+    
+    .stat-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .stat-value {
+      font-size: 36px;
+      font-weight: 800;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1.5px;
+    }
+    
+    /* ═══ Buttons ═══ */
+    .btn {
+      padding: 12px 24px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      transition: all 0.3s var(--transition-smooth);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    
+    .btn:active {
+      transform: scale(0.95);
+    }
+    
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: white;
+      box-shadow: 0 4px 16px var(--primary-glow);
+      position: relative;
+    }
+    
+    .btn-primary:hover {
+      box-shadow: 0 8px 24px var(--primary-glow-strong);
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+      border: 1px solid var(--glass-border);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    /* Forms */
+    .form-group {
+      margin-bottom: 28px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 14px;
+      color: var(--text-main);
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.3s var(--transition-smooth);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      background: var(--input-focus-bg);
+      box-shadow: 0 0 0 4px var(--primary-glow), inset 0 2px 4px rgba(0,0,0,0.1);
+      transform: translateY(-1px);
+    }
+    
+    .form-textarea {
+      min-height: 160px;
+      resize: vertical;
+      line-height: 1.7;
+    }
+    
+    .form-select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7694'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 18px;
+    }
+    
+    /* ═══ Tables ═══ */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.1);
+      border: var(--glass-border);
+    }
+    
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
+    .table th {
+      padding: 18px 24px;
+      text-align: left;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: var(--glass-border);
+    }
+    
+    .table td {
+      padding: 20px 24px;
+      font-size: 14px;
+      color: var(--text-main);
+      border-bottom: var(--glass-border);
+      transition: all 0.2s;
+    }
+    
+    .table tr:last-child td { border-bottom: none; }
+    
+    .table tr { transition: all 0.3s; }
+    .table tr:hover td {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--primary-accent);
+    }
+    
+    /* ═══ Badges ═══ */
+    .badge {
+      padding: 6px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.3px;
+    }
+    
+    .badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+    
+    .badge-success { background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
+    .badge-warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid var(--warning-border); }
+    .badge-danger { background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); }
+    .badge-info { background: var(--info-bg); color: var(--info-text); border: 1px solid var(--info-border); }
+    
+    /* ═══ Progress ═══ */
+    .progress-bar {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 12px;
+      border: var(--glass-border);
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--primary-gradient);
+      border-radius: 20px;
+      box-shadow: 0 0 15px var(--primary-glow);
+      transition: width 1s var(--transition-smooth);
+      position: relative;
+    }
+    
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: progress-shimmer 2s infinite linear;
+    }
+    
+    @keyframes progress-shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    /* ═══ Accordions ═══ */
+    .book-accordion-list { display: flex; flex-direction: column; gap: 16px; }
+    
+    .book-accordion-item {
+      background: var(--card-highlight);
+      border: var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s var(--transition-smooth);
+    }
+    
+    .book-accordion-item.active {
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+      border-color: var(--primary-accent);
+    }
+    
+    .book-accordion-header {
+      padding: 24px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.02);
+      transition: background 0.3s;
+    }
+    
+    .book-accordion-header:hover { background: rgba(255, 255, 255, 0.05); }
+    
+    .book-accordion-title { font-size: 18px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 12px; }
+    
+    .book-accordion-icon { transition: transform 0.4s var(--transition-bounce); font-size: 20px; color: var(--text-muted); }
+    .book-accordion-item.active .book-accordion-icon { transform: rotate(180deg); color: var(--primary-accent); }
+    
+    .book-accordion-content {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.6s var(--transition-smooth);
+      background: rgba(0, 0, 0, 0.15);
+    }
+    
+    .book-accordion-item.active .book-accordion-content { 
+      max-height: 5000px; 
+      padding: 20px; 
+      border-top: var(--glass-border); 
+    }
+    
+    /* ═══ Chapters ═══ */
+    .chapter-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: var(--glass-border);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 0.3s var(--transition-smooth);
+    }
+    
+    .chapter-item:hover { background: rgba(255, 255, 255, 0.04); transform: translateX(8px); }
+    
+    .chapter-header { padding: 22px 28px; display: flex; align-items: center; cursor: pointer; }
+    
+    .chapter-num { font-weight: 800; color: var(--primary-accent); width: 70px; font-size: 13px; letter-spacing: 0.5px; }
+    .chapter-title { flex: 1; font-weight: 600; font-size: 15px; color: var(--text-main); }
+    
+    .chapter-expand-icon { transition: transform 0.4s var(--transition-bounce); color: var(--text-muted); font-size: 12px; }
+    .chapter-item.active .chapter-expand-icon { transform: rotate(90deg); color: var(--primary-accent); }
+    
+    .chapter-content-inline {
+      max-height: 0; overflow: hidden;
+      transition: all 0.5s var(--transition-smooth);
+      background: rgba(0, 0, 0, 0.2);
+      font-size: 16px; line-height: 2; color: var(--text-main);
+    }
+    
+    .chapter-item.active .chapter-content-inline { max-height: 2000px; padding: 48px; border-top: var(--glass-border); overflow-y: auto; }
+    .chapter-content-inline p { margin-bottom: 2em; text-indent: 2em; text-align: justify; }
+    .chapter-content-inline p:last-child { margin-bottom: 0; }
+    
+    .chapter-stats { margin-right: 28px; color: var(--text-muted); font-size: 13px; font-weight: 500; }
+    
+    /* ═══ Terminal ═══ */
+    .terminal {
+      background: var(--terminal-bg);
+      border: var(--glass-border);
+      border-radius: 18px;
+      padding: 24px;
+      font-family: 'Fira Code', 'Monaco', monospace;
+      font-size: 13px;
+      height: 440px;
+      overflow-y: auto;
+      box-shadow: inset 0 4px 12px rgba(0,0,0,0.5);
+      border-left: 4px solid var(--primary-accent);
+      position: relative;
+    }
+    
+    .terminal-line { margin-bottom: 8px; animation: terminalFade 0.4s var(--transition-smooth) forwards; opacity: 0; }
+    @keyframes terminalFade { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    
+    .terminal-prompt { color: var(--success-text); font-weight: 700; margin-right: 12px; text-shadow: 0 0 10px rgba(52, 211, 153, 0.3); }
+    .terminal-cmd { color: var(--warning-text); }
+    .terminal-output { color: #cbd5e1; line-height: 1.7; }
+    
+    /* Modal (Glassmorphism) */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--modal-overlay);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+    
+    .modal {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: var(--glass-border);
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      width: 500px;
+      max-width: 90vw;
+      transform: scale(0.95) translateY(20px);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .modal-overlay.active .modal {
+      transform: scale(1) translateY(0);
+    }
+    
+    .modal-header {
+      padding: 24px 30px;
+      border-bottom: var(--glass-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-header h3 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    
+    .modal-body {
+      padding: 30px;
+    }
+    
+    .modal-footer {
+      padding: 20px 30px;
+      border-top: var(--glass-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      background: rgba(0,0,0,0.05);
+      border-radius: 0 0 20px 20px;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 24px;
+      cursor: pointer;
+      transition: color 0.2s, transform 0.2s;
+    }
+    
+    /* ═══ Modals ═══ */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--modal-overlay);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 1000; opacity: 0; transition: all 0.4s var(--transition-smooth);
+    }
+    
+    .modal-overlay.active { display: flex; opacity: 1; }
+    
+    .modal {
+      background: var(--glass-bg);
+      backdrop-filter: blur(48px);
+      -webkit-backdrop-filter: blur(48px);
+      border: var(--glass-border);
+      border-radius: 28px;
+      width: 540px; max-width: 95vw;
+      transform: scale(0.9) translateY(40px);
+      transition: all 0.5s var(--transition-bounce);
+      box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .modal-overlay.active .modal { transform: scale(1) translateY(0); }
+    
+    .modal-header { 
+      padding: 32px 40px; 
+      border-bottom: var(--glass-border); 
+      display: flex; justify-content: space-between; align-items: center;
+      background: rgba(255, 255, 255, 0.015);
+    }
+    .modal-header h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; color: var(--text-main); }
+    
+    .modal-body { padding: 40px; max-height: 70vh; overflow-y: auto; }
+    
+    .modal-footer {
+      padding: 24px 40px; border-top: var(--glass-border);
+      display: flex; justify-content: flex-end; gap: 16px;
+      background: rgba(255, 255, 255, 0.015);
+    }
+    
+    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 28px; cursor: pointer; transition: all 0.3s; }
+    .close-btn:hover { color: var(--text-main); transform: rotate(90deg); }
+    
+    /* Content preview area */
+    .content-preview {
+      white-space: pre-wrap;
+      line-height: 1.8;
+      max-height: 500px;
+      overflow-y: auto;
+      background: var(--input-bg);
+      color: var(--text-main);
+      padding: 28px;
+      border-radius: 18px;
+      font-size: 15px;
+      min-height: 120px;
+      border: var(--glass-border);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+    }
+    
+    .content-preview.placeholder { color: var(--text-muted); font-style: italic; }
+    
+    .context-preview {
+      background: var(--terminal-bg);
+      color: var(--text-main);
+      padding: 16px;
+      border-radius: 12px;
+      white-space: pre-wrap;
+      font-size: 13px;
+      max-height: 180px;
+      overflow-y: auto;
+      border: var(--glass-border);
+    }
+    
+    .btn-danger {
+      background: var(--danger-bg);
+      color: var(--danger-text);
+      border: 1px solid var(--danger-border);
+    }
+    .btn-danger:hover {
+      background: #fb7185;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(251, 113, 133, 0.3);
+    }
+    
+    /* ═══ Writing Status ═══ */
+    .status-banner {
+      background: var(--primary-glow);
+      border: 1px solid var(--primary-glow-strong);
+      padding: 18px 24px; border-radius: 16px;
+      margin-bottom: 24px; display: flex; align-items: center; gap: 14px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .status-banner-dot {
+      width: 10px; height: 10px; background: var(--primary-accent); border-radius: 50%;
+      box-shadow: 0 0 12px var(--primary-accent);
+      animation: pulse 2s infinite;
+    }
+    
+    /* ═══ Empty State ═══ */
+    .empty-state { text-align: center; padding: 100px 40px; }
+    .empty-icon { font-size: 72px; margin-bottom: 24px; filter: drop-shadow(0 0 20px var(--primary-glow)); animation: float 6s ease-in-out infinite; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    .empty-title { font-size: 24px; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
+    .empty-desc { color: var(--text-muted); margin-bottom: 32px; max-width: 440px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+    
+    /* ═══ Toast ═══ */
+    .toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 2000; display: flex; flex-direction: column; gap: 12px; }
+    .toast {
+      background: var(--glass-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      padding: 18px 32px; border-radius: 16px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+      border: var(--glass-border);
+      display: flex; align-items: center; gap: 14px;
+      font-weight: 600; font-size: 14px;
+      animation: toastIn 0.5s var(--transition-bounce);
+    }
+    .toast-success { color: var(--success-text); border-left: 4px solid var(--success-text); }
+    .toast-error { color: var(--danger-text); border-left: 4px solid var(--danger-text); }
+    @keyframes toastIn { from { transform: translateX(100%) scale(0.8); opacity: 0; } to { transform: translateX(0) scale(1); opacity: 1; } }
+    
+    @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
+    
+    .loading { display: flex; align-items: center; justify-content: center; padding: 80px; }
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid rgba(255, 255, 255, 0.05);
+      border-top-color: var(--primary-accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .hidden { display: none !important; }
+    
+    /* ═══ Responsive ═══ */
+    @media (max-width: 1024px) {
+      .sidebar { width: 90px; }
+      .logo h1, .nav-item span:not(.nav-icon) { display: none; }
+      .logo { padding: 32px 20px; justify-content: center; }
+      .nav-item { padding: 16px; justify-content: center; margin-bottom: 12px; }
+      .nav-icon { font-size: 24px; width: auto; }
+      .nav-item.active::after { right: 6px; }
+    }
+    
+    @media (max-width: 768px) {
+      .app { padding: 12px; flex-direction: column; overflow-y: auto; }
+      .sidebar { width: 100%; height: auto; flex-direction: row; padding: 8px 16px; border-radius: 20px; position: sticky; top: 0; }
+      .logo { padding: 0; border: none; margin-right: 20px; }
+      .nav { padding: 0; display: flex; gap: 8px; margin-top: 0; }
+      .nav-item { margin-bottom: 0; padding: 10px 14px; }
+      .main { height: auto; min-height: calc(100vh - 100px); border-radius: 20px; }
+      .header { padding: 24px; }
+      .content { padding: 24px; }
+      .stats { grid-template-columns: 1fr 1fr; gap: 12px; }
+    }
+
+    /* ═══ Custom Select — replaces native <select> to avoid Windows
+         backdrop-filter white-flash repaint ═══ */
+    .custom-select {
+      position: relative;
+      user-select: none;
+    }
+    .custom-select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 13px 18px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-main);
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .custom-select-trigger:hover {
+      border-color: rgba(129,140,248,0.4);
+      background: var(--input-focus-bg);
+    }
+    .custom-select.open .custom-select-trigger {
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+      background: var(--input-focus-bg);
+    }
+    .custom-select-arrow {
+      font-size: 11px;
+      color: var(--text-muted);
+      transition: transform 0.22s;
+      flex-shrink: 0;
+      margin-left: 10px;
+    }
+    .custom-select.open .custom-select-arrow { transform: rotate(180deg); }
+    .custom-select-options {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0; right: 0;
+      /* Solid background — no transparency, no backdrop-filter, no repaint! */
+      background: #141824;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.55), 0 2px 0 rgba(255,255,255,0.04) inset;
+      z-index: 9999;
+      max-height: 320px;
+      overflow-y: auto;
+      display: none;
+      animation: csOptIn 0.15s cubic-bezier(0.16,1,0.3,1);
+    }
+    [data-theme="light"] .custom-select-options {
+      background: #f8f9fc;
+      border-color: rgba(0,0,0,0.1);
+      box-shadow: 0 16px 40px rgba(15,23,42,0.15);
+    }
+    @keyframes csOptIn {
+      from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0)   scale(1); }
+    }
+    .custom-select.open .custom-select-options { display: block; }
+    .custom-select-option {
+      padding: 11px 18px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-main);
+      transition: background 0.12s;
+      border-radius: 0;
+    }
+    .custom-select-option:first-child  { border-radius: 14px 14px 0 0; }
+    .custom-select-option:last-child   { border-radius: 0 0 14px 14px; }
+    .custom-select-option:only-child   { border-radius: 14px; }
+    .custom-select-option:hover        { background: rgba(129,140,248,0.1); color: var(--primary-accent); }
+    .custom-select-option.is-selected  { color: var(--primary-accent); font-weight: 600; }
+    .custom-select-option.is-separator {
+      padding: 6px 18px 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: default;
+      background: transparent;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 4px;
+      border-radius: 0;
+    }
+    .custom-select-option.is-separator:hover { background: transparent; color: var(--text-muted); }
+
+    /* ═══ Auth Page ═══ */
+    .auth-container {
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-base);
+      background-image: var(--bg-gradient);
+    }
+    
+    .auth-card {
+      width: 400px;
+      padding: 40px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: var(--glass-border);
+      border-radius: 24px;
+      box-shadow: var(--glass-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+      overflow: hidden;
+      animation: csOptIn 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: -50px; left: -50px;
+      width: 150px; height: 150px;
+      background: var(--primary-accent);
+      filter: blur(80px);
+      opacity: 0.15;
+      pointer-events: none;
+    }
+    
+    .auth-title {
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: -0.8px;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .auth-mode-switch {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    .auth-mode-switch a {
+      color: var(--primary-accent);
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    .auth-mode-switch a:hover {
+      color: var(--text-main);
+    }
+
+    /* User Profile in Sidebar */
+    .user-profile-widget {
+      margin-top: auto;
+      padding: 16px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .user-profile-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+    .user-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; color: white; flex-shrink: 0;
+      font-size: 14px;
+    }
+    .user-email-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 140px;
+    }
+    .logout-btn {
+      background: transparent;
+      border: none;
+      color: var(--danger-text);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    .logout-btn:hover {
+      background: rgba(251, 113, 133, 0.1);
+    }
+
+    @media (max-width: 1024px) {
+      .user-profile-widget {
+        flex-direction: column;
+        padding: 12px;
+      }
+      .user-email-text { display: none; }
+    }
+    @media (max-width: 768px) {
+      .user-profile-widget {
+        border-top: none; padding: 0; margin-top: 0; margin-left: auto; flex-direction: row; align-items: center;
+      }
+      .user-email-text { display: none; }
+    }
+
+    /* ═══ Guest & Ads UI ═══ */
+    .guest-banner {
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+      color: white;
+      padding: 10px 40px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .guest-banner a { color: white; text-decoration: underline; cursor: pointer; }
+    
+    .btn-download-desktop {
+      margin: 0 16px 20px;
+      background: var(--primary-glow);
+      border: 1px dashed var(--primary-accent);
+      color: var(--primary-accent);
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-download-desktop:hover {
+      background: var(--primary-accent);
+      color: white;
+      border-style: solid;
+    }
+
+    .ad-placeholder {
+      background: var(--card-highlight);
+      border: 1px dashed var(--glass-border);
+      aspect-ratio: 16 / 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      margin-bottom: 28px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .ad-placeholder::after {
+      content: '广告位 (ADVERTISEMENT)';
+      opacity: 0.5;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <!-- Auth Container -->
+  <div id="auth-container" class="auth-container" style="display: none;">
+    <div class="auth-card" id="auth-card">
+      <div class="auth-title">
+        <div class="logo-icon" style="width: 36px; height: 36px; font-size: 18px; box-shadow: none;">📚</div>
+        InkOS Studio
+      </div>
+      
+      <div id="auth-form-login">
+        <form onsubmit="handleAuthSubmit(event, 'login')">
+          <div class="form-group">
+            <label class="form-label">邮箱</label>
+            <input type="email" class="form-input" id="login-email" required placeholder="admin@example.com">
+          </div>
+          <div class="form-group" style="margin-top: 16px;">
+            <label class="form-label">密码</label>
+            <input type="password" class="form-input" id="login-password" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 24px; padding: 14px;" id="login-submit-btn">登录</button>
+        </form>
+        <div class="auth-mode-switch">
+          没有账号？ <a onclick="toggleAuthMode('register')">立即注册</a>
+        </div>
+      </div>
+
+      <div id="auth-form-register" style="display: none;">
+        <form onsubmit="handleAuthSubmit(event, 'register')">
+          <div class="form-group">
+            <label class="form-label">邮箱</label>
+            <input type="email" class="form-input" id="register-email" required placeholder="admin@example.com">
+          </div>
+          <div class="form-group" style="margin-top: 16px;">
+            <label class="form-label">密码</label>
+            <input type="password" class="form-input" id="register-password" required placeholder="设置安全密码">
+          </div>
+          <div class="form-group" style="margin-top: 16px;">
+            <label class="form-label">确认密码</label>
+            <input type="password" class="form-input" id="register-password-confirm" required placeholder="再次输入密码">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 24px; padding: 14px;" id="register-submit-btn">注册账号</button>
+        </form>
+        <div class="auth-mode-switch">
+          已有账号？ <a onclick="toggleAuthMode('login')">返回登录</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app" id="main-app" style="display: none;">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">📚</div>
+        <h1>InkOS Studio</h1>
+      </div>
+      
+      <!-- Download Desktop Button -->
+      <a href="https://example.com/download" target="_blank" class="btn-download-desktop">
+        <span>💻</span> 下载桌面客户端 (免费)
+      </a>
+
+      <nav class="nav">
+        <div class="nav-item active" data-page="dashboard">
+          <span class="nav-icon">📊</span>
+          <span>控制台</span>
+        </div>
+        <div class="nav-item" data-page="books">
+          <span class="nav-icon">📖</span>
+          <span>书籍管理</span>
+        </div>
+        <div class="nav-item" data-page="write">
+          <span class="nav-icon">✍️</span>
+          <span>写作</span>
+        </div>
+        <div class="nav-item" data-page="chapters">
+          <span class="nav-icon">📑</span>
+          <span>章节列表</span>
+        </div>
+        <div class="nav-item" data-page="config">
+          <span class="nav-icon">⚙️</span>
+          <span>配置</span>
+        </div>
+        <div class="nav-item" data-page="terminal">
+          <span class="nav-icon">💻</span>
+          <span>终端</span>
+        </div>
+      </nav>
+      
+      <!-- User Profile Widget -->
+      <div class="user-profile-widget">
+        <div class="user-profile-info">
+          <div class="user-avatar" id="user-avatar">I</div>
+          <div class="user-email-text" id="user-email-display">user@example.com</div>
+        </div>
+        <button class="logout-btn" onclick="logout()" title="退出登录">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <header class="header">
+        <h2 id="page-title">控制台</h2>
+        <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="切换主题">
+          🌙
+        </button>
+      </header>
+      <div class="content">
+        <!-- Dashboard Page -->
+        <div id="page-dashboard" class="page">
+          <div class="stats">
+            <div class="stat-card">
+              <div class="stat-label">总书籍数</div>
+              <div class="stat-value" id="stat-books">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">总章节</div>
+              <div class="stat-value" id="stat-chapters">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">总字数</div>
+              <div class="stat-value" id="stat-words">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">今日写作</div>
+              <div class="stat-value" id="stat-today">0</div>
+            </div>
+          </div>
+
+          <!-- Advertisement Slot -->
+          <div class="ad-placeholder">
+            <div style="font-size: 10px; margin-bottom: 4px;">由赞助商提供支持，支持我们将 InkOS 永久免费运行下去</div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title">📖 最近书籍</div>
+            <div id="recent-books">
+              <div class="loading"><div class="spinner"></div></div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-title">📝 快速操作</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="btn btn-primary" onclick="showCreateBookModal()">
+                <span>➕</span> 创建新书
+              </button>
+              <button class="btn btn-primary" onclick="document.getElementById('import-book-input').click()" style="background: var(--nav-active-bg); color: var(--primary-accent); border: 1px solid var(--primary-glow);">
+                <span>📥</span> 导入本地书籍
+              </button>
+              <button class="btn btn-secondary" onclick="navigateTo('write')">
+                <span>✍️</span> 写下一章
+              </button>
+              <button class="btn btn-secondary" onclick="navigateTo('config')">
+                <span>⚙️</span> 配置 API
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Books Page -->
+        <div id="page-books" class="page hidden">
+          <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <span>共 <strong id="books-count">0</strong> 本书籍</span>
+            <div>
+              <button class="btn btn-primary" onclick="showCreateBookModal()">
+                <span>➕</span> 创建新书
+              </button>
+              <button class="btn btn-primary" onclick="document.getElementById('import-book-input').click()" style="background: var(--surface-2); color: var(--text-color); margin-left: 10px;">
+                <span>📥</span> 导入书籍
+              </button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="table-container">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>书名</th>
+                    <th>题材</th>
+                    <th>章节</th>
+                    <th>字数</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="books-table">
+                  <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">加载中...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Hidden file input for import -->
+        <input type="file" id="import-book-input" accept=".zip" style="display: none;" onchange="importBook(event)">
+
+        <!-- Write Page -->
+        <div id="page-write" class="page hidden">
+          <div class="card">
+            <div class="card-title">✍️ 写作设置</div>
+            <div class="form-group">
+              <label class="form-label">选择书籍</label>
+              <select class="form-select" id="write-book-select">
+                <option value="">-- 请选择书籍 --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">创作指导（可选）</label>
+              <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <button class="btn btn-secondary" onclick="showSaveContextModal()" style="padding: 6px 12px; font-size: 12px;">
+                  <span>💾</span> 保存当前设定
+                </button>
+                <button class="btn btn-secondary" onclick="showContextHistory()" style="padding: 6px 12px; font-size: 12px;">
+                  <span>📋</span> 历史设定
+                </button>
+              </div>
+              <textarea class="form-textarea" id="write-context" placeholder="输入本章的创作重点..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">目标字数（可选）</label>
+              <input type="number" class="form-input" id="write-words" placeholder="2500">
+            </div>
+            <div class="form-group">
+              <label class="form-label">连续写几章</label>
+              <input type="number" class="form-input" id="write-count" value="1" min="1" max="10">
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-primary" id="write-btn" onclick="startWrite()">
+                <span>✍️</span> 开始写作
+              </button>
+              <button class="btn btn-secondary" id="draft-btn" onclick="startDraft()">
+                <span>📝</span> 仅草稿
+              </button>
+            </div>
+          </div>
+          
+          <!-- Writing Status Banner -->
+          <div id="write-status-banner" class="status-banner" style="display: none;">
+            <div class="status-banner-dot"></div>
+            <span id="write-status-text">正在写作中...</span>
+          </div>
+          
+          <div class="card">
+            <div class="card-title">📝 写作日志</div>
+            <div class="terminal" id="write-log" style="max-height: 300px;">
+              <div class="terminal-line">
+                <span class="terminal-prompt">$</span>
+                <span class="terminal-output"> 等待开始写作...</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card" id="content-preview-card">
+            <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+              <div>📖 内容预览 <span id="preview-word-count" style="font-size: 12px; color: #888; margin-left: 10px;">0 字</span></div>
+              <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 12px;" onclick="copyPreviewContent()">📋 一键复制</button>
+            </div>
+            <div id="content-preview" class="content-preview placeholder">
+              等待 AI 开始创作，内容将实时显示在这里...
+            </div>
+          </div>
+        </div>
+
+        <!-- Chapters Page -->
+        <div id="page-chapters" class="page hidden">
+          <div id="books-accordion-container">
+            <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+              <div class="spinner" style="margin: 0 auto 20px;"></div>
+              加载书籍列表中...
+            </div>
+          </div>
+        </div>
+
+        <!-- Config Page -->
+        <div id="page-config" class="page hidden">
+          <div class="card">
+            <div class="card-title">🔑 API 配置</div>
+
+            <!-- AI 服务商 -->
+            <div class="form-group">
+              <label class="form-label">AI 服务商</label>
+              <div class="custom-select" id="cs-provider">
+                <div class="custom-select-trigger" onclick="csToggle('cs-provider')">
+                  <span class="custom-select-value">DeepSeek (Chat 对话模型)</span>
+                  <span class="custom-select-arrow">▾</span>
+                </div>
+                <div class="custom-select-options" id="cs-provider-opts"></div>
+              </div>
+            </div>
+
+            <!-- AI 模型 -->
+            <div class="form-group">
+              <label class="form-label">AI 模型</label>
+              <div class="custom-select" id="cs-model">
+                <div class="custom-select-trigger" onclick="csToggle('cs-model')">
+                  <span class="custom-select-value">deepseek-chat (V3)</span>
+                  <span class="custom-select-arrow">▾</span>
+                </div>
+                <div class="custom-select-options" id="cs-model-opts"></div>
+              </div>
+              <input type="text" class="form-input" id="config-model-custom"
+                placeholder="填写模型名称，如 deepseek-chat"
+                style="margin-top: 10px; display: none;">
+            </div>
+
+            <!-- API Base URL -->
+            <div class="form-group">
+              <label class="form-label">API Base URL</label>
+              <input type="text" class="form-input" id="config-base-url"
+                placeholder="https://api.deepseek.com">
+              <div id="base-url-hint" style="font-size: 12px; color: var(--text-muted); margin-top: 5px;"></div>
+            </div>
+
+            <!-- API Key -->
+            <div class="form-group">
+              <label class="form-label">API Key</label>
+              <input type="password" class="form-input" id="config-api-key" placeholder="sk-...">
+              <div id="api-key-hint" style="font-size: 12px; color: var(--text-muted); margin-top: 5px; font-family: monospace; letter-spacing: 0.05em;"></div>
+            </div>
+
+            <!-- 项目存储路径 -->
+            <div class="form-group">
+              <label class="form-label">项目存储路径</label>
+              <input type="text" class="form-input" id="config-projects-dir" placeholder="D:\InkOS data">
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">所有书籍及配置将存储在此目录下</div>
+            </div>
+
+            <button class="btn btn-primary" onclick="saveConfig()">
+              <span>💾</span> 保存配置
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="card-title">📋 当前配置</div>
+            <div id="current-config" class="terminal">
+              <div class="terminal-line">
+                <span class="terminal-output">加载中...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Terminal Page -->
+        <div id="page-terminal" class="page hidden">
+          <div class="card">
+            <div class="card-title">💻 InkOS 终端</div>
+            <div class="terminal" id="terminal-output" style="height: 500px;">
+              <div class="terminal-line">
+                <span class="terminal-prompt">$</span>
+                <span class="terminal-cmd"> inkos --version</span>
+              </div>
+              <div class="terminal-line">
+                <span class="terminal-output">InkOS v0.5.0 - Multi-agent novel production system</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+              <input type="text" class="form-input" id="terminal-input" placeholder="输入命令..." onkeypress="handleTerminalInput(event)" style="flex: 1;">
+              <button class="btn btn-primary" onclick="executeTerminalCommand()">执行</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Create Book Modal -->
+  <div class="modal-overlay" id="create-book-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>创建新书</h3>
+        <button class="close-btn" onclick="hideModal('create-book-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">书名</label>
+          <input type="text" class="form-input" id="book-title" placeholder="输入书名">
+        </div>
+        <div class="form-group">
+          <label class="form-label">题材</label>
+          <select class="form-select" id="book-genre">
+            <option value="xuanhuan">玄幻</option>
+            <option value="xianxia">仙侠</option>
+            <option value="urban">都市</option>
+            <option value="scifi">科幻</option>
+            <option value="fantasy">奇幻</option>
+            <option value="historical">历史</option>
+            <option value="military">军事</option>
+            <option value="game">游戏</option>
+            <option value="mystery">悬疑</option>
+            <option value="romance">言情</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">每章目标字数</label>
+          <input type="number" class="form-input" id="book-chapter-words" value="2500" placeholder="2500">
+        </div>
+        <div class="form-group">
+          <label class="form-label">目标章节数</label>
+          <input type="number" class="form-input" id="book-target-chapters" value="100" placeholder="100">
+        </div>
+        <div class="form-group">
+          <label class="form-label">创作简报（可选）</label>
+          <textarea class="form-textarea" id="book-brief" placeholder="输入你的创意想法、世界观设定、人物设定等..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="hideModal('create-book-modal')">取消</button>
+        <button class="btn btn-primary" onclick="createBook()">创建</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Context Modal -->
+  <div class="modal-overlay" id="save-context-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>💾 保存创作设定</h3>
+        <button class="close-btn" onclick="hideModal('save-context-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">设定名称</label>
+          <input type="text" class="form-input" id="context-name" placeholder="例如：主角性格设定、世界背景等">
+        </div>
+        <div class="form-group">
+          <label class="form-label">设定内容</label>
+          <textarea class="form-textarea" id="context-content" rows="6" placeholder="输入详细的创作指导内容..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="hideModal('save-context-modal')">取消</button>
+        <button class="btn btn-primary" onclick="saveContext()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Context History Modal -->
+  <div class="modal-overlay" id="context-history-modal">
+    <div class="modal" style="width: 700px; max-width: 95vw;">
+      <div class="modal-header">
+        <h3>📋 历史设定</h3>
+        <button class="close-btn" onclick="hideModal('context-history-modal')">&times;</button>
+      </div>
+      <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+        <div id="context-history-list">
+          <div class="loading"><div class="spinner"></div></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="hideModal('context-history-modal')">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stop Writing Confirmation Modal -->
+  <div class="modal-overlay" id="stop-writing-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>⚠️ 确认停止写作</h3>
+        <button class="close-btn" onclick="hideModal('stop-writing-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 15px;">确定要立即停止写作吗？</p>
+        <p style="color: #ef4444;">本章已创作的内容将被<strong>永久删除</strong>，无法恢复。</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="hideModal('stop-writing-modal')">继续写作</button>
+        <button class="btn btn-danger" onclick="confirmStopWriting()">确认停止</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Config Missing Modal -->
+  <div class="modal-overlay" id="ai-config-missing-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>🤖 需要配置 AI 服务</h3>
+        <button class="close-btn" onclick="hideModal('ai-config-missing-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: center; margin-bottom: 20px; font-size: 40px;">⚙️</div>
+        <p style="margin-bottom: 15px; text-align: center; font-weight: 600;">检测到 AI 配置不完整</p>
+        <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
+          在使用 AI 写作功能前，请先配置必要的 AI 服务信息（服务商、模型名称、接口地址及 API Key）。
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="hideModal('ai-config-missing-modal')">以后再说</button>
+        <button class="btn btn-primary" onclick="hideModal('ai-config-missing-modal'); document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active')); navigateTo('config');">
+          去配置 AI 服务
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // Global State for Chapter List
+    let currentExpandedBookId = null;
+    let expandedChaptersQueue = []; // Array of { bookId, filename }
+    
+    // Auth State
+    let currentUser = null;
+
+    function showAuthPage() {
+      document.getElementById('main-app').style.display = 'none';
+      document.getElementById('auth-container').style.display = 'flex';
+      toggleAuthMode('login');
+      // Hide all modals
+      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+    }
+
+    function showMainApp() {
+      document.getElementById('auth-container').style.display = 'none';
+      document.getElementById('main-app').style.display = 'flex';
+    }
+
+    function toggleAuthMode(mode) {
+      const loginForm = document.getElementById('auth-form-login');
+      const registerForm = document.getElementById('auth-form-register');
+      if (mode === 'login') {
+        loginForm.style.display = 'block';
+        registerForm.style.display = 'none';
+      } else {
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+      }
+    }
+
+    async function handleAuthSubmit(e, mode) {
+      e.preventDefault();
+      const email = document.getElementById(`${mode}-email`).value.trim();
+      const password = document.getElementById(`${mode}-password`).value;
+      const btn = document.getElementById(`${mode}-submit-btn`);
+      
+      if (mode === 'register') {
+        const confirmPw = document.getElementById('register-password-confirm').value;
+        if (password !== confirmPw) {
+          showToast('两次输入的密码不一致', 'error');
+          return;
+        }
+      }
+
+      btn.disabled = true;
+      const originText = btn.textContent;
+      btn.textContent = mode === 'login' ? '登录中...' : '注册中...';
+
+      try {
+        const res = await fetch(`/api/auth/${mode}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        
+        if (!res.ok) throw new Error(data.error || '请求失败');
+        
+        showToast(mode === 'login' ? '登录成功' : '注册成功');
+        initApp(); // Restart app initialization
+      } catch (err) {
+        showToast(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originText;
+      }
+    }
+
+    async function logout() {
+      if (!confirm('确定要退出登录吗？')) return;
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' });
+        currentUser = null;
+        showAuthPage();
+        showToast('已退出登录');
+      } catch (err) {
+        showToast('退出失败', 'error');
+      }
+    }
+
+    // API
+    const API_BASE = '/api';
+    
+    async function api(path, method = 'GET', body = null) {
+      const options = {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+      };
+      if (body) options.body = JSON.stringify(body);
+      
+      const res = await fetch(`${API_BASE}${path}`, options);
+      
+      if (res.status === 401) {
+        showAuthPage();
+        throw new Error('Unauthorized');
+      }
+
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || `HTTP error ${res.status}`);
+      }
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      return data;
+    }
+    
+    // Navigation
+    let currentPage = 'dashboard';
+    
+    function navigateTo(page) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+      // Show target page
+      document.getElementById(`page-${page}`).classList.remove('hidden');
+      // Update nav
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.page === page);
+      });
+      // Update title
+      const titles = {
+        dashboard: '控制台',
+        books: '书籍管理',
+        write: '写作',
+        chapters: '章节列表',
+        config: '配置',
+        terminal: '终端'
+      };
+      document.getElementById('page-title').textContent = titles[page];
+      currentPage = page;
+      
+      // Load data
+      if (page === 'dashboard') loadDashboard();
+      if (page === 'books') loadBooks();
+      if (page === 'chapters') loadBookAccordion();
+      if (page === 'config') loadConfig();
+      if (page === 'write') { loadBookSelects(); checkActiveWriting(); }
+    }
+    
+    // Toast
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+    
+    // Modal
+    function showCreateBookModal() {
+      document.getElementById('create-book-modal').classList.add('active');
+    }
+    
+    function hideModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    
+    // Context Management
+    function showSaveContextModal() {
+      const content = document.getElementById('write-context').value;
+      document.getElementById('context-content').value = content;
+      document.getElementById('context-name').value = '';
+      document.getElementById('save-context-modal').classList.add('active');
+    }
+    
+    async function saveContext() {
+      const name = document.getElementById('context-name').value.trim();
+      const content = document.getElementById('context-content').value.trim();
+      const bookId = document.getElementById('write-book-select').value;
+      
+      if (!name) {
+        showToast('请输入设定名称', 'error');
+        return;
+      }
+      
+      if (!content) {
+        showToast('请输入设定内容', 'error');
+        return;
+      }
+      
+      try {
+        await api('/context/save', 'POST', { bookId, name, content });
+        showToast('设定已保存！');
+        hideModal('save-context-modal');
+      } catch (e) {
+        showToast('保存失败: ' + e.message, 'error');
+      }
+    }
+    
+    async function showContextHistory() {
+      const bookId = document.getElementById('write-book-select').value;
+      document.getElementById('context-history-modal').classList.add('active');
+      
+      try {
+        const params = bookId ? `?bookId=${bookId}` : '';
+        const data = await api(`/context/history${params}`);
+        const history = data.history || [];
+        
+        const list = document.getElementById('context-history-list');
+        
+        if (history.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-icon">📋</div>
+              <div class="empty-title">暂无历史设定</div>
+              <div class="empty-desc">保存创作指导后会显示在这里</div>
+            </div>
+          `;
+        } else {
+          // Store contexts in a map for safe retrieval (avoids XSS via inline onclick)
+          window._contextHistoryMap = {};
+          history.forEach(item => { window._contextHistoryMap[item.id] = item.content; });
+          
+          list.innerHTML = history.map(item => `
+            <div class="card" style="margin-bottom: 15px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <strong>${escapeHtml(item.name)}</strong>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-primary" data-context-id="${item.id}" onclick="applyContextById(this.dataset.contextId)" style="padding: 4px 12px; font-size: 12px;">应用</button>
+                  <button class="btn btn-secondary" onclick="deleteContext('${item.id}')" style="padding: 4px 12px; font-size: 12px; color: var(--danger-text);">删除</button>
+                </div>
+              </div>
+              <div style="color: var(--text-muted); font-size: 12px; margin-bottom: 8px;">
+                ${new Date(item.createdAt).toLocaleString()}
+              </div>
+              <div class="context-preview">${escapeHtml(item.content)}</div>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        document.getElementById('context-history-list').innerHTML = `
+          <div class="terminal-line">
+            <span class="terminal-output" style="color: #ef4444;">加载失败: ${e.message}</span>
+          </div>
+        `;
+      }
+    }
+    
+    function applyContextById(id) {
+      const content = (window._contextHistoryMap || {})[id];
+      if (content !== undefined) {
+        document.getElementById('write-context').value = content;
+        hideModal('context-history-modal');
+        showToast('已应用设定');
+      }
+    }
+    
+    function applyContext(content) {
+      document.getElementById('write-context').value = content;
+      hideModal('context-history-modal');
+      showToast('已应用设定');
+    }
+    
+    async function deleteContext(id) {
+      if (!confirm('确定要删除这个设定吗？')) return;
+      
+      try {
+        await api(`/context/${id}`, 'DELETE');
+        showToast('已删除');
+        showContextHistory();
+      } catch (e) {
+        showToast('删除失败: ' + e.message, 'error');
+      }
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    // Dashboard
+    async function loadDashboard() {
+      try {
+        const data = await api('/books');
+        const books = data.books || [];
+        
+        let totalChapters = 0;
+        let totalWords = 0;
+        
+        books.forEach(book => {
+          totalChapters += book.chapterCount || 0;
+          totalWords += book.wordCount || 0;
+        });
+        
+        document.getElementById('stat-books').textContent = books.length;
+        document.getElementById('stat-chapters').textContent = formatNumber(totalChapters);
+        document.getElementById('stat-words').textContent = formatNumber(totalWords);
+        document.getElementById('stat-today').textContent = '今日已写';
+        
+        // Recent books
+        const recentDiv = document.getElementById('recent-books');
+        if (books.length === 0) {
+          recentDiv.innerHTML = `
+            <div class="empty-state" style="padding: 40px 20px;">
+              <div class="empty-icon" style="font-size: 48px;">📖</div>
+              <div class="empty-title" style="font-size: 18px;">还没有书籍</div>
+              <div class="empty-desc">创建你的第一本书开始写作</div>
+              <button class="btn btn-primary" onclick="showCreateBookModal()">创建新书</button>
+            </div>
+          `;
+        } else {
+          recentDiv.innerHTML = books.slice(0, 5).map(book => `
+            <div class="chapter-item" style="cursor: default; margin-bottom: 12px; background: rgba(255,255,255,0.03);">
+              <div class="chapter-header" style="cursor: default;">
+                <div class="chapter-num">📖</div>
+                <div class="chapter-title">
+                  <strong>${escapeHtml(book.name || book.title)}</strong>
+                  <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">${book.genre} • ${book.chapterCount || 0} 章节</div>
+                </div>
+                <div class="chapter-stats">
+                  <span>${formatNumber(book.wordCount || 0)} 字</span>
+                </div>
+                <button class="btn btn-primary" onclick="navigateTo('write'); document.getElementById('write-book-select').value='${book.id}'; checkActiveWriting();" style="padding: 6px 16px; font-size: 12px;">续写</button>
+                <button class="btn btn-secondary" onclick="shareBook('${book.id}', '${escapeHtml(book.name || book.title)}')" style="padding: 6px 16px; font-size: 12px; border-color: var(--primary-glow);">导出 ZIP</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    
+    // Books
+    async function loadBooks() {
+      try {
+        const data = await api('/books');
+        const books = data.books || [];
+        
+        document.getElementById('books-count').textContent = books.length;
+        
+        const tbody = document.getElementById('books-table');
+        if (books.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">暂无书籍，点击上方按钮创建</td></tr>';
+        } else {
+          tbody.innerHTML = books.map(book => `
+            <tr>
+              <td><strong>${book.title}</strong></td>
+              <td>${getGenreName(book.genre)}</td>
+              <td>${book.chapterCount || 0}</td>
+              <td>${formatNumber(book.wordCount || 0)}</td>
+              <td><span class="badge badge-success">正常</span></td>
+              <td>
+                <button class="btn btn-secondary" onclick="selectBookAndWrite('${book.id}')" style="padding: 6px 12px; font-size: 12px;">续写</button>
+                <button class="btn btn-secondary" onclick="shareBook('${book.id}', '${escapeHtml(book.title)}')" style="padding: 6px 12px; font-size: 12px; color: var(--primary-accent); border-color: var(--primary-glow);">导出备份 (ZIP)</button>
+                <button class="btn btn-secondary" onclick="deleteBook('${book.id}', '${escapeHtml(book.title)}')" style="padding: 6px 12px; font-size: 12px; color: #f87171;">删除</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    
+    // Create Book
+    async function createBook() {
+      if (!(await validateAiConfig())) return;
+      const title = document.getElementById('book-title').value;
+      const genre = document.getElementById('book-genre').value;
+      const chapterWords = document.getElementById('book-chapter-words').value;
+      const targetChapters = document.getElementById('book-target-chapters').value;
+      const brief = document.getElementById('book-brief').value;
+      
+      if (!title) {
+        showToast('请输入书名', 'error');
+        return;
+      }
+      
+      const createBtn = document.querySelector('#create-book-modal .btn-primary');
+      if (createBtn) {
+        createBtn.disabled = true;
+        createBtn.textContent = '正在创建，请稍候(可能需几十秒)...';
+      }
+      
+      try {
+        await api('/books', 'POST', {
+          title,
+          genre,
+          chapterWords: parseInt(chapterWords),
+          targetChapters: parseInt(targetChapters),
+          brief
+        });
+        
+        hideModal('create-book-modal');
+        showToast('书籍创建成功！');
+        loadBooks();
+        loadDashboard();
+      } catch (e) {
+        showToast('创建失败: ' + e.message, 'error');
+      } finally {
+        if (createBtn) {
+          createBtn.disabled = false;
+          createBtn.textContent = '创建';
+        }
+      }
+    }
+    
+    // Delete Book
+    async function deleteBook(id, title) {
+      if (!confirm(`确定要删除《${title}》吗？此操作不可恢复！`)) return;
+      
+      try {
+        await api(`/books/${id}`, 'DELETE');
+        showToast('删除成功');
+        loadBooks();
+        loadDashboard();
+      } catch (e) {
+        showToast('删除失败: ' + e.message, 'error');
+      }
+    }
+    
+    // Share Book
+    function shareBook(id, title) {
+      showToast(`正在准备《${title}》包，请稍候...`);
+      window.location.href = `/api/books/${id}/share`;
+    }
+    
+    // Import Book
+    async function importBook(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      showToast('开始导入，请等待...');
+      
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const token = getToken();
+        const headers = {};
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+        
+        const res = await fetch('/api/books/import', {
+          method: 'POST',
+          headers,
+          body: formData
+        });
+        
+        const data = await res.json();
+        
+        if (!res.ok) {
+           throw new Error(data.error || '导入失败');
+        }
+        
+        showToast('书籍导入成功！');
+        loadBooks();
+        loadDashboard();
+      } catch (e) {
+        showToast('导入失败: ' + e.message, 'error');
+      } finally {
+        // Reset input value so same file can be uploaded again if needed
+        event.target.value = '';
+      }
+    }
+    
+    // Select Book and Write
+    function selectBookAndWrite(bookId) {
+      navigateTo('write');
+      setTimeout(() => {
+        document.getElementById('write-book-select').value = bookId;
+      }, 100);
+    }
+    
+    // Load Book Selects
+    async function loadBookSelects() {
+      try {
+        const data = await api('/books');
+        const books = data.books || [];
+        
+        const options = '<option value="">-- 请选择书籍 --</option>' + 
+          books.map(book => `<option value="${book.id}">${book.title}</option>`).join('');
+        
+        const writeS = document.getElementById('write-book-select');
+        
+        if (writeS) {
+          const oldW = writeS.value;
+          writeS.innerHTML = options;
+          if (oldW) writeS.value = oldW;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    
+    // Write
+    let isWriting = false;
+    let currentBookId = null;
+    
+    // Update button state
+    function updateWriteButtonState(writing) {
+      const writeBtn = document.getElementById('write-btn');
+      const draftBtn = document.getElementById('draft-btn');
+      
+      if (writing) {
+        writeBtn.innerHTML = '<span>⏹️</span> 停止写作';
+        writeBtn.onclick = () => showStopWritingModal();
+        writeBtn.classList.add('btn-danger');
+        writeBtn.classList.remove('btn-primary');
+        draftBtn.disabled = true;
+      } else {
+        writeBtn.innerHTML = '<span>✍️</span> 开始写作';
+        writeBtn.onclick = () => startWrite();
+        writeBtn.classList.remove('btn-danger');
+        writeBtn.classList.add('btn-primary');
+        writeBtn.style.background = '';
+        draftBtn.disabled = false;
+      }
+    }
+    
+    function showStopWritingModal() {
+      document.getElementById('stop-writing-modal').classList.add('active');
+    }
+    
+    async function confirmStopWriting() {
+      hideModal('stop-writing-modal');
+      
+      if (!currentBookId) return;
+      
+      try {
+        await api(`/books/${currentBookId}/stop`, 'POST');
+        showToast('写作已停止');
+        isWriting = false;
+        currentBookId = null;
+        updateWriteButtonState(false);
+      } catch (e) {
+        showToast('停止失败: ' + e.message, 'error');
+      }
+    }
+    
+    async function startWrite(isReconnect = false) {
+      if (!isReconnect && !(await validateAiConfig())) return;
+      const bookId = document.getElementById('write-book-select').value;
+      const context = document.getElementById('write-context').value;
+      const wordsInput = document.getElementById('write-words').value;
+      const words = wordsInput || '2500';
+      const count = document.getElementById('write-count').value;
+      
+      if (!bookId) {
+        if (!isReconnect) showToast('请选择书籍', 'error');
+        return;
+      }
+      
+      if (isWriting && !isReconnect) {
+        showToast('正在写作中，请等待完成', 'error');
+        return;
+      }
+      
+      isWriting = true;
+      currentBookId = bookId;
+      updateWriteButtonState(true);
+      
+      const log = document.getElementById('write-log');
+      const preview = document.getElementById('content-preview');
+      const banner = document.getElementById('write-status-banner');
+      const statusText = document.getElementById('write-status-text');
+      
+      // Show status banner, clear preview
+      banner.style.display = 'flex';
+      statusText.textContent = isReconnect ? '正在重新连接...' : '正在启动写作引擎...';
+      preview.classList.remove('placeholder');
+      preview.textContent = '';
+      document.getElementById('preview-word-count').textContent = '0 字';
+      
+      log.innerHTML = `
+        <div class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-cmd"> inkos write next ${bookId} --count ${count}</span>
+        </div>
+        <div class="terminal-line">
+          <span class="terminal-output">${isReconnect ? '⏳ 正在请求状态恢复...' : '⏳ 准备开始写作...'}</span>
+        </div>
+      `;
+      
+      // Add progress bar
+      const progressHtml = `
+        <div class="terminal-line" id="write-progress-container">
+          <div style="width: 100%; margin: 10px 0;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+              <span id="progress-label">写作进度</span>
+              <span id="progress-text">0%</span>
+            </div>
+            <div class="progress-bar" style="height: 20px; background: #222; border-radius: 10px; overflow: hidden;">
+              <div id="progress-fill" class="progress-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #f97316, #ea580c); transition: width 0.3s;"></div>
+            </div>
+          </div>
+        </div>
+      `;
+      log.innerHTML += progressHtml;
+      
+      try {
+        const params = new URLSearchParams();
+        if (context) params.append('context', context);
+        if (words) params.append('words', words);
+        params.append('count', count);
+        
+        const response = await fetch(`${API_BASE}/books/${bookId}/write?${params}`);
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let totalChapters = parseInt(count);
+        let completedChapters = 0;
+        let lastData = null;
+        
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+          
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                lastData = data;
+                
+                switch (data.type) {
+                  case 'start':
+                    log.innerHTML += `<div class="terminal-line"><span class="terminal-output">📝 ${data.message}</span></div>`;
+                    document.getElementById('progress-label').textContent = `目标: ${data.targetChapters} 章`;
+                    break;
+                    
+                  case 'heartbeat':
+                    // Update status banner
+                    if (statusText) statusText.textContent = data.message;
+                    break;
+                    
+                  case 'content_clear':
+                    preview.textContent = '';
+                    preview.classList.add('placeholder');
+                    document.getElementById('preview-word-count').textContent = '0 字';
+                    break;
+                    
+                  case 'content_update':
+                    // Real-time content preview
+                    preview.classList.remove('placeholder');
+                    preview.textContent += data.content;
+                    document.getElementById('preview-word-count').textContent = `${data.totalLength} 字`;
+                    preview.scrollTop = preview.scrollHeight;
+                    break;
+                    
+                  case 'chapter_complete':
+                    completedChapters = data.chapter;
+                    const progress = Math.round((completedChapters / totalChapters) * 100);
+                    document.getElementById('progress-fill').style.width = progress + '%';
+                    document.getElementById('progress-text').textContent = progress + '%';
+                    document.getElementById('progress-label').textContent = `已完成 ${completedChapters}/${totalChapters} 章`;
+                    
+                    log.innerHTML += `
+                      <div class="terminal-line">
+                        <span class="terminal-output" style="color: var(--success-text);">✅ ${data.message}</span>
+                      </div>
+                    `;
+                    // Clear preview for next chapter
+                    preview.innerHTML = '';
+                    break;
+                    
+                  case 'progress':
+                    log.innerHTML += `<div class="terminal-line"><span class="terminal-output">✍️ ${data.message}</span></div>`;
+                    break;
+                    
+                  case 'status':
+                    {
+                      let statusColor = 'var(--info-text)';
+                      if (data.message.includes('🔧')) statusColor = 'var(--warning-text)';
+                      if (data.message.includes('🤖')) statusColor = 'var(--primary-accent)';
+                      if (data.message.includes('✅')) statusColor = 'var(--success-text)';
+                      if (data.message.includes('⚠️')) statusColor = 'var(--warning-text)';
+                      log.innerHTML += `<div class="terminal-line"><span class="terminal-output" style="color: ${statusColor};">${data.message}</span></div>`;
+                    }
+                    break;
+                    
+                  case 'complete':
+                    document.getElementById('progress-fill').style.width = '100%';
+                    document.getElementById('progress-text').textContent = '100%';
+                    log.innerHTML += `
+                      <div class="terminal-line">
+                        <span class="terminal-output" style="color: var(--success-text);">🎉 ${data.message}</span>
+                      </div>
+                    `;
+                    break;
+                    
+                  case 'cancelled':
+                    log.innerHTML += `
+                      <div class="terminal-line">
+                        <span class="terminal-output" style="color: var(--warning-text);">⚠️ ${data.message}</span>
+                      </div>
+                    `;
+                    document.getElementById('content-preview-card').style.display = 'none';
+                    break;
+                    
+                  case 'error':
+                    log.innerHTML += `
+                      <div class="terminal-line">
+                        <span class="terminal-output" style="color: var(--danger-text);">❌ 错误: ${data.message}</span>
+                      </div>
+                    `;
+                    break;
+                }
+              } catch {
+                if (line.trim()) {
+                  log.innerHTML += `<div class="terminal-line"><span class="terminal-output">${line}</span></div>`;
+                }
+              }
+            }
+          }
+          
+          log.scrollTop = log.scrollHeight;
+        }
+        
+        if (lastData?.type !== 'cancelled') {
+          showToast('写作任务完成！');
+        }
+        loadDashboard();
+        loadBookSelects();
+      } catch (e) {
+        log.innerHTML += `
+          <div class="terminal-line">
+            <span class="terminal-output" style="color: var(--danger-text);">❌ 错误: ${e.message}</span>
+          </div>
+        `;
+      } finally {
+        isWriting = false;
+        currentBookId = null;
+        updateWriteButtonState(false);
+        // Hide status banner
+        if (banner) banner.style.display = 'none';
+      }
+    }
+    
+    async function startDraft() {
+      if (!(await validateAiConfig())) return;
+      const bookId = document.getElementById('write-book-select').value;
+      const context = document.getElementById('write-context').value;
+      const wordsInput = document.getElementById('write-words').value;
+      const words = wordsInput || '2500';
+      
+      if (!bookId) {
+        showToast('请选择书籍', 'error');
+        return;
+      }
+      
+      if (isWriting) {
+        showToast('正在写作中，请等待完成', 'error');
+        return;
+      }
+      
+      isWriting = true;
+      const log = document.getElementById('write-log');
+      const startBtn = document.getElementById('write-btn');
+      const draftBtn = document.getElementById('draft-btn');
+      
+      if (startBtn) startBtn.disabled = true;
+      if (draftBtn) draftBtn.disabled = true;
+      
+      log.innerHTML = `
+        <div class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-cmd"> inkos draft ${bookId}</span>
+        </div>
+        <div class="terminal-line">
+          <span class="terminal-output">📝 开始写草稿...</span>
+        </div>
+      `;
+      
+      try {
+        const params = new URLSearchParams();
+        if (context) params.append('context', context);
+        if (words) params.append('words', words);
+        
+        const response = await fetch(`${API_BASE}/books/${bookId}/draft?${params}`);
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+          
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                
+                switch (data.type) {
+                  case 'start':
+                  case 'progress':
+                  case 'status':
+                    log.innerHTML += `<div class="terminal-line"><span class="terminal-output">📝 ${data.message}</span></div>`;
+                    break;
+                    
+                  case 'heartbeat':
+                    break;
+                    
+                  case 'chapter_complete':
+                    log.innerHTML += `
+                      <div class="terminal-line">
+                        <span class="terminal-output" style="color: var(--success-text);">✅ ${data.message}</span>
+                      </div>
+                    `;
+                    break;
+                    
+                  case 'complete':
+                    log.innerHTML += `
+                      <div class="terminal-line">
+                        <span class="terminal-output" style="color: var(--success-text);">🎉 ${data.message}</span>
+                      </div>
+                    `;
+                    break;
+                    
+                  case 'error':
+                    log.innerHTML += `
+                      <div class="terminal-line">
+                        <span class="terminal-output" style="color: var(--danger-text);">❌ ${data.message}</span>
+                      </div>
+                    `;
+                    break;
+                }
+              } catch {
+                if (line.trim()) {
+                  log.innerHTML += `<div class="terminal-line"><span class="terminal-output">${line}</span></div>`;
+                }
+              }
+            }
+          }
+          
+          log.scrollTop = log.scrollHeight;
+        }
+        
+        showToast('草稿完成！');
+        loadDashboard();
+        loadBookSelects();
+      } catch (e) {
+        log.innerHTML += `
+          <div class="terminal-line">
+            <span class="terminal-output" style="color: var(--danger-text);">❌ 错误: ${e.message}</span>
+          </div>
+        `;
+      } finally {
+        isWriting = false;
+        if (startBtn) startBtn.disabled = false;
+        if (draftBtn) draftBtn.disabled = false;
+      }
+    }
+    
+    // Chapters
+    async function loadBookAccordion() {
+      const container = document.getElementById('books-accordion-container');
+      try {
+        const data = await api('/books');
+        const books = data.books || [];
+        if (books.length === 0) {
+          container.innerHTML = '<div class="card" style="text-align: center; padding: 40px; color: var(--text-muted);">暂无书籍，请先创建</div>';
+          return;
+        }
+        
+        container.innerHTML = books.map(book => `
+          <div class="book-accordion-item" id="book-accordion-${book.id}">
+            <div class="book-accordion-header" onclick="toggleBook('${book.id}')">
+              <div class="book-accordion-title">
+                <span>📖</span> ${escapeHtml(book.title)}
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: normal; margin-left: 8px;">
+                  (${book.chapterCount || 0} 章节)
+                </span>
+              </div>
+              <div class="book-accordion-icon">▼</div>
+            </div>
+            <div class="book-accordion-content" id="book-content-${book.id}">
+              <div class="chapters-list" id="chapters-list-${book.id}">
+                <div style="padding: 20px; text-align: center; color: var(--text-muted);">
+                  <div class="spinner" style="margin: 0 auto 10px;"></div>
+                  正在加载章节...
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('');
+        
+        // If there was a previously expanded book, try to re-expand it
+        if (currentExpandedBookId) {
+          const exists = books.find(b => b.id === currentExpandedBookId);
+          if (exists) {
+            const tempId = currentExpandedBookId;
+            currentExpandedBookId = null;
+            toggleBook(tempId);
+          }
+        }
+      } catch (e) {
+        container.innerHTML = `<div class="card" style="color: var(--danger-text); padding: 20px;">加载书籍失败: ${e.message}</div>`;
+      }
+    }
+
+    async function toggleBook(bookId) {
+      const items = document.querySelectorAll('.book-accordion-item');
+      const targetItem = document.getElementById(`book-accordion-${bookId}`);
+      
+      const isCurrentlyActive = targetItem.classList.contains('active');
+      
+      // Collapse all books
+      items.forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      if (!isCurrentlyActive) {
+        targetItem.classList.add('active');
+        currentExpandedBookId = bookId;
+        
+        // Load chapters if not loaded
+        const listDiv = document.getElementById(`chapters-list-${bookId}`);
+        if (!listDiv.dataset.loaded) {
+          try {
+            const data = await api(`/books/${bookId}/chapters`);
+            const chapters = data.chapters || [];
+            
+            if (chapters.length === 0) {
+              listDiv.innerHTML = '<div style="padding: 30px; text-align: center; color: var(--text-muted);">暂无章节</div>';
+            } else {
+              listDiv.innerHTML = chapters.map((ch, i) => {
+                const safeId = ch.filename.replace(/\.[^/.]+$/, "");
+                const uniqueId = `${bookId}-${safeId}`;
+                return `
+                  <div class="chapter-item" id="chapter-${uniqueId}">
+                    <div class="chapter-header" onclick="toggleChapter('${bookId}', '${ch.filename}')">
+                      <div class="chapter-num">第 ${ch.chapterNum || (i + 1)} 章</div>
+                      <div class="chapter-title">${escapeHtml(ch.title || '未命名')}</div>
+                      <div class="chapter-stats">${formatNumber(ch.wordCount || 0)} 字</div>
+                      <div class="chapter-expand-icon">▶</div>
+                    </div>
+                    <div class="chapter-content-inline" id="content-${uniqueId}">
+                      <div style="padding: 20px; text-align: center;">
+                        <div class="spinner" style="margin: 0 auto;"></div>
+                      </div>
+                    </div>
+                  </div>
+                `;
+              }).join('');
+            }
+            listDiv.dataset.loaded = 'true';
+          } catch (e) {
+            listDiv.innerHTML = `<div style="padding: 20px; color: var(--danger-text);">加载失败: ${e.message}</div>`;
+          }
+        }
+      } else {
+        currentExpandedBookId = null;
+      }
+    }
+
+    async function toggleChapter(bookId, filename) {
+      const safeId = filename.replace(/\.[^/.]+$/, "");
+      const uniqueId = `${bookId}-${safeId}`;
+      const item = document.getElementById(`chapter-${uniqueId}`);
+      const contentDiv = document.getElementById(`content-${uniqueId}`);
+      
+      const isActive = item.classList.contains('active');
+      
+      if (!isActive) {
+        // Expand
+        // Limit to 2 expanded chapters across all books
+        if (expandedChaptersQueue.length >= 2) {
+          const oldest = expandedChaptersQueue.shift();
+          const oldestSafeId = oldest.filename.replace(/\.[^/.]+$/, "");
+          const oldestUniqueId = `${oldest.bookId}-${oldestSafeId}`;
+          const oldestItem = document.getElementById(`chapter-${oldestUniqueId}`);
+          if (oldestItem) oldestItem.classList.remove('active');
+        }
+        
+        expandedChaptersQueue.push({ bookId, filename });
+        item.classList.add('active');
+        
+        // If content not loaded, fetch it
+        if (!contentDiv.dataset.loaded) {
+          try {
+            const data = await api(`/books/${bookId}/chapter/${filename}`);
+            if (data.content) {
+              // Split by newlines and wrap in <p> tags for proper formatting
+              const paras = data.content.split('\n')
+                .map(p => p.trim())
+                .filter(p => p.length > 0);
+              
+              const contentHtml = paras.map(p => `<p>${escapeHtml(p)}</p>`).join('');
+              contentDiv.innerHTML = `
+                <div style="text-align: right; margin-bottom: 10px;">
+                  <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 12px;" onclick="copyChapterContent('${uniqueId}', event)">📋 一键复制</button>
+                </div>
+                <div id="text-${uniqueId}">
+                  ${contentHtml}
+                </div>
+              `;
+            } else {
+              contentDiv.innerHTML = '<div style="color:var(--text-muted); padding: 30px; text-align: center;">内容为空</div>';
+            }
+            contentDiv.dataset.loaded = 'true';
+          } catch (e) {
+            contentDiv.innerHTML = `<div style="color:var(--danger-text); padding: 30px;">加载失败: ${e.message}</div>`;
+          }
+        }
+        
+        // Smooth scroll if needed
+        setTimeout(() => {
+          item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 350);
+        
+      } else {
+        // Collapse
+        item.classList.remove('active');
+        expandedChaptersQueue = expandedChaptersQueue.filter(q => !(q.bookId === bookId && q.filename === filename));
+      }
+    }
+    
+    // ── Config Page ──────────────────────────────────────────────────────────
+
+    // 全球及国内主流 AI 服务商及模型全集 (2025 最新版)
+    const PROVIDER_PRESETS = {
+      deepseek: {
+        label: 'DeepSeek',
+        baseUrl: 'https://api.deepseek.com',
+        hint: '官方 DeepSeek API (V3/R1)',
+        models: [
+          { value: 'deepseek-v3.2', label: 'deepseek-v3.2' },
+          { value: 'deepseek-chat', label: 'deepseek-chat' },
+          { value: 'deepseek-reasoner', label: 'deepseek-reasoner' }
+        ]
+      },
+      siliconflow: {
+        label: 'SiliconFlow (硅基流动)',
+        baseUrl: 'https://api.siliconflow.cn/v1',
+        hint: '国内首选聚合加速器，极其丰富',
+        models: [
+          { value: 'deepseek-ai/DeepSeek-V3', label: 'DeepSeek-V3' },
+          { value: 'deepseek-ai/DeepSeek-R1', label: 'DeepSeek-R1' },
+          { value: 'Pro/deepseek-ai/DeepSeek-R1', label: 'DeepSeek-R1-Pro (高速)' },
+          { value: 'Qwen/Qwen2.5-72B-Instruct', label: 'Qwen2.5-72B' },
+          { value: '__custom__', label: '自定义模型名称…' }
+        ]
+      },
+      moonshot: {
+        label: 'Moonshot (月之暗面 Kimi)',
+        baseUrl: 'https://api.moonshot.cn/v1',
+        hint: 'Kimi 开放平台 (Moonshot)',
+        models: [
+          { value: 'moonshot-v1-8k', label: 'moonshot-v1-8k' },
+          { value: 'moonshot-v1-32k', label: 'moonshot-v1-32k' },
+          { value: 'moonshot-v1-128k', label: 'moonshot-v1-128k' },
+          { value: '__custom__', label: '自定义模型名称…' }
+        ]
+      },
+      minimax: {
+        label: 'MiniMax (星野)',
+        baseUrl: 'https://api.minimax.chat/v1',
+        hint: 'MiniMax 开放平台',
+        models: [
+          { value: 'abab6.5s-chat', label: 'abab6.5s (对话)' },
+          { value: 'abab7-chat-preview', label: 'abab7 (最新推理)' },
+          { value: '__custom__', label: '自定义模型名称…' }
+        ]
+      },
+      zhipu: {
+        label: 'Zhipu AI (智谱 GLM)',
+        baseUrl: 'https://open.bigmodel.cn/api/paas/v4',
+        hint: '智谱 AI 开放平台 (CogView/GLM-4)',
+        models: [
+          { value: 'glm-4-plus', label: 'GLM-4-Plus' },
+          { value: 'glm-4-flash', label: 'GLM-4-Flash' },
+          { value: 'glm-zero-preview', label: 'GLM-Zero (推理模型)' },
+          { value: '__custom__', label: '自定义模型名称…' }
+        ]
+      },
+      doubao: {
+        label: 'ByteDance (字节跳动/豆包)',
+        baseUrl: 'https://ark.cn-beijing.volces.com/api/v3',
+        hint: '字节跳动火山方舟 (Ark API v3)',
+        models: [
+          { value: 'ep-2025******-*****', label: 'Doubao-Pro (由接入点 ID 替换)' },
+          { value: 'ep-2025******-*****', label: 'Doubao-Lite (由接入点 ID 替换)' },
+          { value: '__custom__', label: '直接填写 Endpoint ID' }
+        ]
+      },
+      ernie: {
+        label: 'Baidu (百度文心)',
+        baseUrl: 'https://qianfan.baidubce.com/v2',
+        hint: '百度千帆大模型平台 (V2 兼容接口)',
+        models: [
+          { value: 'ernie-4.0-8k-latest', label: 'ERNIE 4.0' },
+          { value: 'ernie-3.5-8k', label: 'ERNIE 3.5' },
+          { value: 'ernie-speed-128k', label: 'ERNIE Speed (长文本)' },
+          { value: '__custom__', label: '自定义模型名称…' }
+        ]
+      },
+      hunyuan: {
+        label: 'Tencent (腾讯混元)',
+        baseUrl: 'https://api.hunyuan.cloud.tencent.com/v1',
+        hint: '腾讯混元 API (兼容 OpenAI 模式)',
+        models: [
+          { value: 'hunyuan-turbo-latest', label: 'Hunyuan-Turbo' },
+          { value: 'hunyuan-pro', label: 'Hunyuan-Pro' },
+          { value: 'hunyuan-standard', label: 'Hunyuan-Standard' },
+          { value: '__custom__', label: '自定义模型名称…' }
+        ]
+      },
+      custom: {
+        label: '自定义 (OpenAI 兼容)',
+        baseUrl: '',
+        hint: '填写任意兼容 OpenAI 接口的 API Base URL',
+        models: [
+          { value: '__custom__', label: '自定义模型名称…' }
+        ]
+      }
+    };
+
+    // 当前选中的值（模拟 select.value）
+    let currentProviderVal = 'deepseek';
+    let currentModelVal = 'deepseek-chat';
+
+    /** 初始化下拉组件 */
+    function csBuild() {
+      // 1. 构建服务商列表
+      const provOpts = document.getElementById('cs-provider-opts');
+      provOpts.innerHTML = Object.keys(PROVIDER_PRESETS).map(key => {
+        const p = PROVIDER_PRESETS[key];
+        return `<div class="custom-select-option" data-value="${key}" onclick="csSelect('cs-provider', '${key}')">${p.label}</div>`;
+      }).join('');
+
+      // 点击外部关闭下拉
+      window.addEventListener('click', (e) => {
+        if (!e.target.closest('.custom-select')) {
+          document.querySelectorAll('.custom-select').forEach(el => el.classList.remove('open'));
+        }
+      });
+    }
+
+    /** 切换下拉显示 */
+    function csToggle(id) {
+      const el = document.getElementById(id);
+      const isOpen = el.classList.contains('open');
+      document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
+      if (!isOpen) el.classList.add('open');
+    }
+
+    /** 选择选项 */
+    function csSelect(id, value, skipChange = false) {
+      const el = document.getElementById(id);
+      const valSpan = el.querySelector('.custom-select-value');
+      
+      if (id === 'cs-provider') {
+        currentProviderVal = value;
+        const preset = PROVIDER_PRESETS[value] || PROVIDER_PRESETS.custom;
+        valSpan.textContent = preset.label;
+        
+        // 更新选项样式
+        el.querySelectorAll('.custom-select-option').forEach(opt => {
+          opt.classList.toggle('is-selected', opt.dataset.value === value);
+        });
+
+        if (!skipChange) onProviderChange();
+      } else {
+        currentModelVal = value;
+        const prov = PROVIDER_PRESETS[currentProviderVal] || PROVIDER_PRESETS.custom;
+        const modelObj = prov.models.find(m => m.value === value);
+        valSpan.textContent = modelObj ? modelObj.label : value;
+
+        el.querySelectorAll('.custom-select-option').forEach(opt => {
+          opt.classList.toggle('is-selected', opt.dataset.value === value);
+        });
+
+        if (!skipChange) onModelSelectChange();
+      }
+      
+      el.classList.remove('open');
+    }
+
+    /** 猜测服务商 (支持 15+ 种国内外主流) */
+    function guessProvider(data) {
+      const url = data.baseUrl || '';
+      const model = data.model || '';
+      
+      // 核心
+      if (url.includes('deepseek.com')) return 'deepseek';
+      if (url.includes('openai.com')) return 'openai';
+      if (url.includes('anthropic.com')) return 'anthropic';
+      if (url.includes('google.apis.com')) return 'google';
+      // 国内
+      if (url.includes('aliyuncs.com')) return 'qwen';
+      if (url.includes('baidubce.com')) return 'ernie';
+      if (url.includes('tencent.com')) return 'hunyuan';
+      if (url.includes('volces.com')) return 'doubao';
+      if (url.includes('minimax.chat')) return 'minimax';
+      if (url.includes('stepfun.com')) return 'step';
+      if (url.includes('xf-yun.com')) return 'spark';
+      if (url.includes('milm.mi.com') || url.includes('milm.mi.cn')) return 'xiaomi';
+      if (url.includes('bigmodel.cn')) return 'zhipu';
+      if (url.includes('moonshot.cn')) return 'moonshot';
+      if (url.includes('tiangong.cn')) return 'tiangong';
+      // 聚合
+      if (url.includes('siliconflow.cn')) return 'siliconflow';
+      if (url.includes('openrouter.ai')) return 'openrouter';
+      if (url.includes('groq.com')) return 'groq';
+      
+      return data.model || data.baseUrl ? 'custom' : 'deepseek';
+    }
+
+    function onProviderChange(keepExistingModel = false) {
+      const preset = PROVIDER_PRESETS[currentProviderVal] || PROVIDER_PRESETS.custom;
+
+      // 1. 更新 Base URL
+      const baseUrlInput = document.getElementById('config-base-url');
+      if (!keepExistingModel || currentProviderVal !== 'custom') {
+        if (preset.baseUrl) baseUrlInput.value = preset.baseUrl;
+      }
+
+      // 2. 更新提示
+      document.getElementById('base-url-hint').textContent = preset.hint || '';
+
+      // 3. 构建模型下拉
+      const modelOpts = document.getElementById('cs-model-opts');
+      modelOpts.innerHTML = preset.models.map(m => {
+        return `<div class="custom-select-option" data-value="${m.value}" onclick="csSelect('cs-model', '${m.value}')">${m.label}</div>`;
+      }).join('');
+
+      // 4. 选中第一个模型
+      csSelect('cs-model', preset.models[0].value, true);
+      onModelSelectChange();
+    }
+
+    function onModelSelectChange() {
+      const customInput = document.getElementById('config-model-custom');
+      const isCustom = currentModelVal === '__custom__';
+      customInput.style.display = isCustom ? 'block' : 'none';
+      if (isCustom && !customInput.value) customInput.focus();
+    }
+
+    async function loadConfig() {
+      // 首次构建
+      csBuild();
+
+      try {
+        const data = await api('/config');
+
+        // 猜测服务商
+        const provider = guessProvider(data);
+        csSelect('cs-provider', provider, true);
+        
+        // 手动触发一次构建模型列表
+        const preset = PROVIDER_PRESETS[provider] || PROVIDER_PRESETS.custom;
+        const modelOpts = document.getElementById('cs-model-opts');
+        modelOpts.innerHTML = preset.models.map(m => {
+          return `<div class="custom-select-option" data-value="${m.value}" onclick="csSelect('cs-model', '${m.value}')">${m.label}</div>`;
+        }).join('');
+
+        // 还原 URL
+        if (data.baseUrl) document.getElementById('config-base-url').value = data.baseUrl;
+        document.getElementById('base-url-hint').textContent = preset.hint || '';
+
+        // 还原模型
+        const savedModel = data.model || '';
+        const hasModelInList = preset.models.some(m => m.value === savedModel && m.value !== '__custom__');
+        if (hasModelInList) {
+          csSelect('cs-model', savedModel, true);
+        } else {
+          csSelect('cs-model', '__custom__', true);
+          const customInput = document.getElementById('config-model-custom');
+          customInput.value = savedModel;
+          customInput.style.display = savedModel ? 'block' : 'none';
+        }
+
+        // 密钥提示
+        document.getElementById('config-projects-dir').value = data.projectsDir || '';
+        const hintEl = document.getElementById('api-key-hint');
+        if (data.apiKey && data.apiKey.length > 8) {
+          hintEl.textContent = `当前密钥: ${data.apiKey.slice(0, 6)}••••••••${data.apiKey.slice(-4)}`;
+        } else {
+          hintEl.textContent = data.apiKey ? '当前密钥: 已设置' : '';
+        }
+
+        // 当前摘要
+        const maskedKey = data.apiKey ? `${data.apiKey.slice(0, 4)}****${data.apiKey.slice(-4)}` : '未配置';
+        document.getElementById('current-config').innerHTML = `
+          <div class="terminal-line"><span class="terminal-output">📂 存储路径: ${data.projectsDir || '默认'}</span></div>
+          <div class="terminal-line"><span class="terminal-output">🤖 模型: ${data.model || '未配置'}</span></div>
+          <div class="terminal-line"><span class="terminal-output">🔗 Base URL: ${data.baseUrl || '未配置'}</span></div>
+          <div class="terminal-line"><span class="terminal-output">🔑 API Key: ${maskedKey}</span></div>
+        `;
+      } catch (e) { console.error(e); }
+    }
+
+    async function saveConfig() {
+      const baseUrl = document.getElementById('config-base-url').value.trim();
+      const apiKey = document.getElementById('config-api-key').value.trim();
+      const model = currentModelVal === '__custom__' ? document.getElementById('config-model-custom').value.trim() : currentModelVal;
+      const projectsDir = document.getElementById('config-projects-dir').value.trim();
+
+      if (!model || !baseUrl) {
+        showToast('请完整填写配置信息', 'error');
+        return;
+      }
+
+      // 直接保存当前选中的 Provider 标识
+      const provider = currentProviderVal;
+
+      try {
+        await api('/config', 'POST', { provider, baseUrl, apiKey, model, projectsDir });
+        showToast('配置保存成功！');
+        loadConfig();
+      } catch (e) { showToast('保存失败: ' + e.message, 'error'); }
+    }
+    
+    // Terminal
+    function handleTerminalInput(e) {
+      if (e.key === 'Enter') {
+        executeTerminalCommand();
+      }
+    }
+    
+    async function executeTerminalCommand() {
+      const input = document.getElementById('terminal-input');
+      const cmd = input.value.trim();
+      if (!cmd) return;
+      
+      const output = document.getElementById('terminal-output');
+      output.innerHTML += `
+        <div class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-cmd"> ${cmd}</span>
+        </div>
+      `;
+      
+      input.value = '';
+      
+      try {
+        const data = await api('/terminal', 'POST', { command: cmd });
+        output.innerHTML += `
+          <div class="terminal-line">
+            <span class="terminal-output">${data.output || '执行完成'}</span>
+          </div>
+        `;
+        output.scrollTop = output.scrollHeight;
+      } catch (e) {
+        output.innerHTML += `
+          <div class="terminal-line">
+            <span class="terminal-output" style="color: var(--danger-text);">错误: ${e.message}</span>
+          </div>
+        `;
+      }
+    }
+    
+    // Utilities
+    function formatNumber(num) {
+      if (num >= 10000) {
+        return (num / 10000).toFixed(1) + '万';
+      }
+      return num.toLocaleString();
+    }
+    
+    function getGenreName(genre) {
+      const names = {
+        xuanhuan: '玄幻',
+        xianxia: '仙侠',
+        urban: '都市',
+        scifi: '科幻',
+        fantasy: '奇幻',
+        historical: '历史',
+        military: '军事',
+        game: '游戏',
+        mystery: '悬疑',
+        romance: '言情'
+      };
+      return names[genre] || genre;
+    }
+    
+    async function copyPreviewContent() {
+      const previewText = document.getElementById('content-preview').innerText;
+      if (!previewText || document.getElementById('content-preview').classList.contains('placeholder')) {
+        showToast('内容为空，无法复制', 'error');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(previewText);
+        showToast('内容已存入剪贴板', 'success');
+      } catch (err) {
+        showToast('复制失败：' + err.message, 'error');
+      }
+    }
+    
+    async function copyChapterContent(uniqueId, e) {
+      if (e) {
+        e.stopPropagation();
+      }
+      const el = document.getElementById(`text-${uniqueId}`);
+      if (!el) return;
+      
+      const paragraphs = Array.from(el.querySelectorAll('p')).map(p => p.innerText);
+      const text = paragraphs.join('\n');
+      
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast('章节内容已成功复制！', 'success');
+      } catch (err) {
+        showToast('复制失败：' + err.message, 'error');
+      }
+    }
+    
+    // Navigation click handlers
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        navigateTo(item.dataset.page);
+      });
+    });
+    
+    async function checkActiveWriting() {
+      try {
+        const data = await api('/writing-status');
+        if (data.active && data.active.length > 0) {
+          const activeBookId = data.active[0];
+          
+          if (!isWriting) {
+            const writeS = document.getElementById('write-book-select');
+            if (writeS.value !== activeBookId) {
+              writeS.value = activeBookId;
+            }
+            startWrite(true);
+          }
+        }
+      } catch (e) {}
+    }
+    
+    // Theme Toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('inkos-theme', newTheme);
+      
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.innerHTML = newTheme === 'dark' ? '🌙' : '☀️';
+    }
+    
+    // Initialize Theme
+    const savedTheme = localStorage.getItem('inkos-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) themeBtn.innerHTML = savedTheme === 'dark' ? '🌙' : '☀️';
+
+    // Initialize App With Auth Check
+    async function initApp() {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          currentUser = data.user;
+          document.getElementById('user-email-display').textContent = currentUser.email;
+          document.getElementById('user-avatar').textContent = currentUser.email.charAt(0).toUpperCase();
+          
+          // Guest Mode Detection & UI Toggle
+          if (currentUser.id.startsWith('guest_')) {
+            const guestBanner = document.createElement('div');
+            guestBanner.className = 'guest-banner';
+            guestBanner.id = 'guest-banner';
+            guestBanner.style.display = 'flex';
+            guestBanner.innerHTML = `
+              <div>✨ 您当前处于<b>游客体验模式</b>，数据将在 2 小时后自动清理。</div>
+              <div><a onclick="navigateTo('books')">及时刷新</a> &nbsp; | &nbsp; <a onclick="navigateTo('books')">导出 ZIP 永久保存到本地</a></div>
+            `;
+            document.querySelector('.main').prepend(guestBanner);
+          }
+
+          showMainApp();
+          loadDashboard();
+          loadBookSelects().then(() => {
+            checkActiveWriting();
+          });
+        } else {
+          showAuthPage();
+        }
+      } catch (err) {
+        showAuthPage();
+      }
+    }
+
+    // AI Config Validation
+    async function validateAiConfig() {
+      try {
+        const config = await api('/config');
+        // Check core requirements
+        const isConfigured = config.apiKey && config.model && config.baseUrl;
+        
+        if (!isConfigured) {
+          document.getElementById('ai-config-missing-modal').classList.add('active');
+          return false;
+        }
+        return true;
+      } catch (e) {
+        console.error('Config validation error:', e);
+        // Fallback to allowing the call if API fails, or showing the modal
+        return true; 
+      }
+    }
+
+    // Start App
+    initApp();
+  </script>
+</body>
+</html>
