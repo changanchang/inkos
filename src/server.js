@@ -1411,7 +1411,7 @@ app.get('*', (req, res) => {
 });
 
 // 定期清理过期游客数据 (每小时执行)
-setInterval(() => {
+setInterval(async () => {
   const GUESTS_DIR = join(INKOS_HOME, 'temp_guests');
   if (!existsSync(GUESTS_DIR)) return;
 
