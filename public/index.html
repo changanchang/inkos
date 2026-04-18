@@ -1291,6 +1291,16 @@
           已有账号？ <a onclick="toggleAuthMode('login')">返回登录</a>
         </div>
       </div>
+
+      <!-- Guest Entry Option -->
+      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed rgba(255,255,255,0.1); text-align: center;">
+        <button class="btn btn-secondary" style="width: 100%; border-color: var(--primary-accent); border-style: dashed; background: rgba(129, 140, 248, 0.05);" onclick="handleGuestEntry()" id="guest-entry-btn">
+          ⚡ 游客模式免登录直接体验
+        </button>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">
+          * 游客数据仅保存 2 小时，适合快速试用 AI 写作功能
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1827,6 +1837,30 @@
         showToast('已退出登录');
       } catch (err) {
         showToast('退出失败', 'error');
+      }
+    }
+
+    async function handleGuestEntry() {
+      const btn = document.getElementById('guest-entry-btn');
+      const originalText = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle;"></div> 正在开启游客通道...';
+
+      try {
+        const res = await fetch('/api/auth/guest-login', { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+          showToast('游客通道已开启！正在进入...', 'success');
+          // delay slightly for UX
+          setTimeout(() => window.location.reload(), 500);
+        } else {
+          showToast(data.error || '游客模式开启失败', 'error');
+        }
+      } catch (err) {
+        showToast('网络请求失败', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
       }
     }
 

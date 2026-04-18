@@ -8,7 +8,7 @@ import { homedir } from 'os';
 import {
   verifyPassword, encryptApiKey, decryptApiKey,
   findUserByEmail, createUser, getUserProjectsDir, getUserEnvFile, getUserContextHistoryFile,
-  createSession, getSession, deleteSession, parseCookies, requireAuth
+  createSession, createGuestSession, getSession, deleteSession, parseCookies, requireAuth
 } from './auth.js';
 import multer from 'multer';
 import AdmZip from 'adm-zip';
@@ -81,6 +81,16 @@ app.post('/api/auth/logout', (req, res) => {
   if (token) deleteSession(token);
   res.setHeader('Set-Cookie', 'inkos_session=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax');
   res.json({ success: true });
+});
+
+app.post('/api/auth/guest-login', (req, res) => {
+  try {
+    const { token, guestId } = createGuestSession();
+    res.setHeader('Set-Cookie', `inkos_session=${token}; HttpOnly; Path=/; Max-Age=${2 * 3600}; SameSite=Lax`);
+    res.json({ success: true, user: { id: guestId, email: 'guest@example.com', isGuest: true } });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 app.get('/api/auth/me', (req, res) => {
