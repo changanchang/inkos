@@ -240,11 +240,12 @@ export function requireAuth(req, res, next) {
   let session = getSession(token);
 
   if (!session) {
-    // 自动分配游客 ID
+    // 如果是 API 请求且没有 Session，自动分配一个（支持无感体验）
     const { token: guestToken, guestId } = createGuestSession();
+    // 关键修复：确保在 API 响应中设置 Cookie，这样后续请求就能携带它
     res.setHeader('Set-Cookie', `inkos_session=${guestToken}; HttpOnly; Path=/; Max-Age=${2 * 3600}; SameSite=Lax`);
-    session = getSession(guestToken);
-    console.log(`[AUTH] 自动分配游客身份: ${guestId}`);
+    session = { userId: guestId, email: 'guest@example.com', isGuest: true };
+    console.log(`[AUTH] 无感模式自动分配游客身份: ${guestId}`);
   }
 
   req.user = { id: session.userId, email: session.email, isGuest: !!session.isGuest };

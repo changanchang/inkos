@@ -1851,8 +1851,10 @@
         const data = await res.json();
         if (res.ok) {
           showToast('游客通道已开启！正在进入...', 'success');
-          // delay slightly for UX
-          setTimeout(() => window.location.reload(), 500);
+          // 强制使用 href 跳转，确保浏览器重新初始化所有状态和 Cookie
+          setTimeout(() => {
+            window.location.href = window.location.origin + window.location.pathname;
+          }, 500);
         } else {
           showToast(data.error || '游客模式开启失败', 'error');
         }
