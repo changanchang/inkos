@@ -51,7 +51,7 @@ app.post('/api/auth/register', (req, res) => {
   try {
     const user = createUser(email, password);
     const token = createSession(user.id, user.email);
-    res.setHeader('Set-Cookie', `inkos_session=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 3600}; SameSite=Lax`);
+    res.setHeader('Set-Cookie', `inkos_session=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 3600}; SameSite=None; Secure`);
     res.json({ success: true, user: { id: user.id, email: user.email } });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -71,7 +71,7 @@ app.post('/api/auth/login', (req, res) => {
     return res.status(401).json({ error: '邮箱或密码错误' });
   }
   const token = createSession(user.id, user.email);
-  res.setHeader('Set-Cookie', `inkos_session=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 3600}; SameSite=Lax`);
+  res.setHeader('Set-Cookie', `inkos_session=${token}; HttpOnly; Path=/; Max-Age=${7 * 24 * 3600}; SameSite=None; Secure`);
   res.json({ success: true, user: { id: user.id, email: user.email } });
 });
 
@@ -79,14 +79,14 @@ app.post('/api/auth/logout', (req, res) => {
   const cookies = parseCookies(req.headers.cookie);
   const token = cookies['inkos_session'];
   if (token) deleteSession(token);
-  res.setHeader('Set-Cookie', 'inkos_session=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax');
+  res.setHeader('Set-Cookie', 'inkos_session=; HttpOnly; Path=/; Max-Age=0; SameSite=None; Secure');
   res.json({ success: true });
 });
 
 app.post('/api/auth/guest-login', (req, res) => {
   try {
     const { token, guestId } = createGuestSession();
-    res.setHeader('Set-Cookie', `inkos_session=${token}; HttpOnly; Path=/; Max-Age=${2 * 3600}; SameSite=Lax`);
+    res.setHeader('Set-Cookie', `inkos_session=${token}; HttpOnly; Path=/; Max-Age=${2 * 3600}; SameSite=None; Secure`);
     res.json({ success: true, user: { id: guestId, email: 'guest@example.com', isGuest: true } });
   } catch (e) {
     res.status(500).json({ error: e.message });
