@@ -958,6 +958,50 @@
       .nav-item.active::after { right: 6px; }
     }
     
+    /* ═══ Custom Title Bar (Desktop Frameless Window) ═══ */
+    .custom-titlebar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 32px;
+      z-index: 99999;
+      -webkit-app-region: drag;
+      display: none;
+      justify-content: space-between;
+      align-items: center;
+      padding-left: 14px;
+      background: transparent;
+      pointer-events: none;
+    }
+    .custom-titlebar .titlebar-title {
+      font-size: 12px;
+      color: var(--text-muted);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .custom-titlebar .win-controls {
+      display: flex;
+      -webkit-app-region: no-drag;
+      pointer-events: auto;
+      height: 100%;
+    }
+    .custom-titlebar .win-btn {
+      width: 46px;
+      height: 32px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+      -webkit-app-region: no-drag;
+    }
+    .custom-titlebar .win-btn:hover { background: rgba(255,255,255,0.08); color: var(--text-primary); }
+    .custom-titlebar .win-btn.win-btn-close:hover { background: #e81123; color: #fff; }
+    .custom-titlebar .win-btn svg { width: 10px; height: 10px; }
+    
     @media (max-width: 768px) {
       .app { padding: 12px; flex-direction: column; overflow-y: auto; }
       .sidebar { width: 100%; height: auto; flex-direction: row; padding: 8px 16px; border-radius: 20px; position: sticky; top: 0; }
@@ -1243,65 +1287,200 @@
       opacity: 0.5;
       font-weight: 800;
     }
+
+    /* ═══ Landing Page Styles ═══ */
+    .landing-container {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg-base);
+      background-image: var(--bg-gradient);
+      overflow-y: auto; overflow-x: hidden;
+      z-index: 1000;
+      display: flex; flex-direction: column;
+    }
+
+    /* Navbar */
+    .landing-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 60px;
+      position: sticky; top: 0;
+      background: rgba(6, 8, 15, 0.6);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      z-index: 100;
+    }
+    .landing-nav .nav-links { display: flex; gap: 32px; }
+    .landing-nav .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 600; transition: color 0.3s;
+    }
+    .landing-nav .nav-links a:hover { color: var(--text-main); }
+
+    /* Hero */
+    .hero-section {
+      min-height: 80vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; position: relative; padding: 100px 20px;
+    }
+    .hero-bg-glow {
+      position: absolute; width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 60%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none; animation: pulseGlow 8s infinite alternate;
+    }
+    @keyframes pulseGlow { 0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; } 100% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; } }
+    
+    .hero-content { position: relative; z-index: 10; max-width: 800px; }
+    .hero-title {
+      font-size: 72px; font-weight: 800; line-height: 1.1; letter-spacing: -2px; margin-bottom: 32px;
+      background: linear-gradient(to right, #ffffff, #a5b4fc);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 24px rgba(99,102,241,0.2));
+    }
+    .hero-subtitle { font-size: 20px; color: var(--text-muted); line-height: 1.6; margin-bottom: 56px; }
+    .hero-buttons { display: flex; gap: 24px; justify-content: center; }
+    .hero-btn-main { padding: 20px 40px; font-size: 18px; border-radius: 100px; box-shadow: 0 12px 32px var(--primary-glow); }
+    .hero-btn-alt { padding: 20px 40px; font-size: 18px; border-radius: 100px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); }
+    .hero-disclaimer { font-size: 13px; color: var(--text-muted); margin-top: 32px; opacity: 0.7; }
+
+    /* Features / Bento Grid */
+    .features-section { padding: 80px 60px 120px; max-width: 1200px; margin: 0 auto; width: 100%; position: relative; z-index: 10;}
+    .section-title { font-size: 36px; font-weight: 800; text-align: center; margin-bottom: 60px; letter-spacing: -1px; }
+    
+    .bento-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .bento-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 32px; padding: 40px;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative; overflow: hidden;
+      text-align: left;
+    }
+    .bento-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.06), transparent 80%);
+      opacity: 0; transition: opacity 0.3s; pointer-events: none;
+    }
+    .bento-card:hover { transform: translateY(-8px); border-color: rgba(129,140,248,0.3); box-shadow: 0 24px 48px -12px rgba(0,0,0,0.3); }
+    .bento-card:hover::before { opacity: 1; }
+    
+    .bento-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 24px; }
+    .bento-card h3 { font-size: 24px; font-weight: 700; margin-bottom: 16px; color: var(--text-main); }
+    .bento-card p { font-size: 16px; color: var(--text-muted); line-height: 1.7; }
+
+    /* Footer */
+    .landing-footer { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 14px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: auto; }
+
+    /* Animations */
+    .fade-up { opacity: 0; animation: fadeUpAnim 1s forwards cubic-bezier(0.16, 1, 0.3, 1); transform: translateY(40px); }
+    @keyframes fadeUpAnim { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 1024px) {
+      .hero-title { font-size: 56px; }
+      .bento-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .landing-nav { padding: 16px 20px; }
+      .landing-nav .nav-links { display: none; }
+      .hero-title { font-size: 40px; }
+      .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-card { grid-column: span 1 !important; }
+      .features-section { padding: 60px 20px; }
+    }
   </style>
 </head>
 <body>
-  <!-- Auth Container -->
-  <div id="auth-container" class="auth-container" style="display: none;">
-    <div class="auth-card" id="auth-card">
-      <div class="auth-title">
-        <div class="logo-icon" style="width: 36px; height: 36px; font-size: 18px; box-shadow: none;">📚</div>
-        InkOS Studio
-      </div>
-      
-      <div id="auth-form-login">
-        <form onsubmit="handleAuthSubmit(event, 'login')">
-          <div class="form-group">
-            <label class="form-label">邮箱</label>
-            <input type="email" class="form-input" id="login-email" required placeholder="admin@example.com">
-          </div>
-          <div class="form-group" style="margin-top: 16px;">
-            <label class="form-label">密码</label>
-            <input type="password" class="form-input" id="login-password" required placeholder="••••••••">
-          </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 24px; padding: 14px;" id="login-submit-btn">登录</button>
-        </form>
-        <div class="auth-mode-switch">
-          没有账号？ <a onclick="toggleAuthMode('register')">立即注册</a>
-        </div>
-      </div>
 
-      <div id="auth-form-register" style="display: none;">
-        <form onsubmit="handleAuthSubmit(event, 'register')">
-          <div class="form-group">
-            <label class="form-label">邮箱</label>
-            <input type="email" class="form-input" id="register-email" required placeholder="admin@example.com">
-          </div>
-          <div class="form-group" style="margin-top: 16px;">
-            <label class="form-label">密码</label>
-            <input type="password" class="form-input" id="register-password" required placeholder="设置安全密码">
-          </div>
-          <div class="form-group" style="margin-top: 16px;">
-            <label class="form-label">确认密码</label>
-            <input type="password" class="form-input" id="register-password-confirm" required placeholder="再次输入密码">
-          </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 24px; padding: 14px;" id="register-submit-btn">注册账号</button>
-        </form>
-        <div class="auth-mode-switch">
-          已有账号？ <a onclick="toggleAuthMode('login')">返回登录</a>
-        </div>
-      </div>
-
-      <!-- Guest Entry Option -->
-      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed rgba(255,255,255,0.1); text-align: center;">
-        <button class="btn btn-secondary" style="width: 100%; border-color: var(--primary-accent); border-style: dashed; background: rgba(129, 140, 248, 0.05);" onclick="handleGuestEntry()" id="guest-entry-btn">
-          ⚡ 游客模式免登录直接体验
-        </button>
-        <div style="font-size: 11px; color: var(--text-muted); margin-top: 8px;">
-          * 游客数据仅保存 2 小时，适合快速试用 AI 写作功能
-        </div>
-      </div>
+  <!-- Custom Title Bar (Desktop only) -->
+  <div class="custom-titlebar" id="custom-titlebar">
+    <span class="titlebar-title">InkOS Studio</span>
+    <div class="win-controls">
+      <button class="win-btn" id="win-btn-min" title="最小化">
+        <svg viewBox="0 0 10 1"><rect width="10" height="1" fill="currentColor"/></svg>
+      </button>
+      <button class="win-btn" id="win-btn-max" title="最大化">
+        <svg id="win-icon-max" viewBox="0 0 10 10"><rect x="0.5" y="0.5" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+        <svg id="win-icon-restore" viewBox="0 0 10 10" style="display:none;"><rect x="2" y="0" width="7.5" height="7.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="0" y="2.5" width="7.5" height="7.5" fill="var(--bg-primary)" stroke="currentColor" stroke-width="1"/></svg>
+      </button>
+      <button class="win-btn win-btn-close" id="win-btn-close" title="关闭">
+        <svg viewBox="0 0 10 10"><line x1="1" y1="1" x2="9" y2="9" stroke="currentColor" stroke-width="1.2"/><line x1="9" y1="1" x2="1" y2="9" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
     </div>
+  </div>
+
+  <!-- Auth Container -->
+  <div id="auth-container" class="landing-container" style="display: none;">
+    <!-- Navbar -->
+    <nav class="landing-nav">
+      <div class="logo" style="padding: 0;">
+        <div class="logo-icon" style="width: 36px; height: 36px; font-size: 18px; box-shadow: 0 4px 12px var(--primary-glow);">📚</div>
+        <h1 style="font-size: 20px; margin: 0; background: var(--primary-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">InkOS Studio</h1>
+      </div>
+      <div class="nav-links">
+        <a href="#features">核心特性</a>
+        <a href="#features">工作流</a>
+        <a href="#features">关于项目</a>
+      </div>
+      <button class="btn btn-primary" style="padding: 10px 24px; font-size: 14px; border-radius: 100px; box-shadow: 0 4px 16px var(--primary-glow);" onclick="handleGuestEntry(event)">
+        开始创作
+      </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+      <div class="hero-bg-glow"></div>
+      <div class="hero-content fade-up" style="animation-delay: 0.1s;">
+        <div class="badge badge-info" style="margin-bottom: 32px; font-size: 13px; padding: 10px 20px; border-radius: 100px; background: rgba(129, 140, 248, 0.1); border: 1px solid rgba(129, 140, 248, 0.3); backdrop-filter: blur(8px);">✨ v1.0.0 正式版现已发布</div>
+        <h1 class="hero-title">打破创作边界<br/>灵感永不枯竭</h1>
+        <p class="hero-subtitle">
+          基于多代理（Multi-Agent）架构的私有化 AI 小说辅助工作流。<br/>
+          通过独创 RAG 提取技术，完美解决长篇续写中角色崩塌与设定遗忘痛点。
+        </p>
+        <div class="hero-buttons">
+          <button class="btn btn-secondary hero-btn-alt" onclick="handleDownloadClient()">
+            <span style="margin-right: 8px;">💻</span> 软件下载
+          </button>
+          <button class="btn btn-primary hero-btn-main" onclick="handleGuestEntry(event)">
+            <span style="font-size: 20px; margin-right: 8px;">✨</span> 免费开始创作
+          </button>
+        </div>
+        <div class="hero-disclaimer">* 无需注册，即开即用（为保护隐私，所有项目数据均在2小时后自动阅后即焚）</div>
+      </div>
+    </header>
+
+    <!-- Bento Features Grid -->
+    <section class="features-section" id="features">
+      <h2 class="section-title fade-up">为什么选择 InkOS？</h2>
+      <div class="bento-grid">
+        <div class="bento-card fade-up" style="animation-delay: 0.2s; grid-column: span 2;">
+          <div class="bento-icon" style="background: rgba(139,92,246,0.1); color: #a855f7;">🧠</div>
+          <h3>强一致性记忆引擎</h3>
+          <p>强大的自动知识库能够提取并索引复杂的人物设定与世界观。每一章的生成都会自动溯源前文核心细节，彻底告别人设崩塌与 OOC 难题，让角色随着剧情真实成长。</p>
+        </div>
+        <div class="bento-card fade-up" style="animation-delay: 0.3s;">
+          <div class="bento-icon" style="background: rgba(99,102,241,0.1); color: #818cf8;">⚡</div>
+          <h3>多Agent专家系统</h3>
+          <p>内置大纲构架师、角色图谱设计师与剧情主笔 Agent，他们将分工协作打磨您的创意。</p>
+        </div>
+        <div class="bento-card fade-up" style="animation-delay: 0.4s;">
+          <div class="bento-icon" style="background: rgba(52,211,153,0.1); color: #34d399;">🔒</div>
+          <h3>极致隐私纯净私有</h3>
+          <p>完美适配 Ollama / LM Studio 等离线大模型算力。所有的敏感构思都在您的设备上运算，100% 捍卫您的版权安全。</p>
+        </div>
+        <div class="bento-card fade-up" style="animation-delay: 0.5s; grid-column: span 2;">
+          <div class="bento-icon" style="background: rgba(251,113,133,0.1); color: #fb7185;">✍️</div>
+          <h3>沉浸式无尽心流连载</h3>
+          <p>基于微调延续（Contextual Continuation）生成算法，打破基础模型的长文本注意力衰减瓶颈，只需一键点击，畅快产出十几上百章连贯流丽的文章序列。</p>
+        </div>
+      </div>
+    </section>
+    
+    <footer class="landing-footer fade-up" style="animation-delay: 0.6s;">
+      <div>&copy; 2026 InkOS Studio. Build unbounded imagination.</div>
+      <div style="font-size: 12px; margin-top: 8px;">Developed by Actalk · Obsidian Noir Design System</div>
+    </footer>
   </div>
 
   <div class="app" id="main-app" style="display: none;">
@@ -1313,7 +1492,7 @@
       </div>
       
       <!-- Download Desktop Button -->
-      <a href="#" onclick="showToast('桌面版客户端正在紧锣密鼓地开发中，敬请期待！', 'info'); return false;" class="btn-download-desktop">
+      <a href="#" onclick="handleDownloadClient(); return false;" class="btn-download-desktop">
         <span>💻</span> 下载桌面客户端 (免费)
       </a>
 
@@ -1387,7 +1566,7 @@
           </div>
 
           <!-- Advertisement Slot -->
-          <div class="ad-placeholder">
+          <div class="ad-placeholder" id="ad-dashboard-banner">
             <div style="font-size: 10px; margin-bottom: 4px;">由赞助商提供支持，支持我们将 InkOS 永久免费运行下去</div>
           </div>
           
@@ -1575,13 +1754,20 @@
             <div class="form-group">
               <label class="form-label">API Key</label>
               <input type="password" class="form-input" id="config-api-key" placeholder="sk-...">
-              <div id="api-key-hint" style="font-size: 12px; color: var(--text-muted); margin-top: 5px; font-family: monospace; letter-spacing: 0.05em;"></div>
             </div>
 
             <!-- 项目存储路径 -->
             <div class="form-group">
               <label class="form-label">项目存储路径</label>
-              <input type="text" class="form-input" id="config-projects-dir" placeholder="D:\InkOS data">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="text" class="form-input" id="config-projects-dir" placeholder="D:\InkOS data" style="flex: 1;">
+                <button class="btn btn-secondary" id="btn-select-projects-dir" title="选择文件夹" style="white-space: nowrap; padding: 8px 14px;">
+                  📁 选择
+                </button>
+                <button class="btn btn-secondary" id="btn-open-projects-dir" title="在文件管理器中打开" style="white-space: nowrap; padding: 8px 14px; display: none;">
+                  📂 打开
+                </button>
+              </div>
               <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">所有书籍及配置将存储在此目录下</div>
             </div>
 
@@ -1781,6 +1967,7 @@
     function toggleAuthMode(mode) {
       const loginForm = document.getElementById('auth-form-login');
       const registerForm = document.getElementById('auth-form-register');
+      if (!loginForm || !registerForm) return;
       if (mode === 'login') {
         loginForm.style.display = 'block';
         registerForm.style.display = 'none';
@@ -1840,11 +2027,14 @@
       }
     }
 
-    async function handleGuestEntry() {
-      const btn = document.getElementById('guest-entry-btn');
-      const originalText = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle;"></div> 正在开启游客通道...';
+    async function handleGuestEntry(event) {
+      const btn = event ? event.currentTarget : null;
+      let originalText = '';
+      if (btn) {
+        originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle;"></div> 正在开启游客通道...';
+      }
 
       try {
         const res = await fetch('/api/auth/guest-login', { method: 'POST' });
@@ -1861,8 +2051,10 @@
       } catch (err) {
         showToast('网络请求失败', 'error');
       } finally {
-        btn.disabled = false;
-        btn.innerHTML = originalText;
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
       }
     }
 
@@ -2811,11 +3003,13 @@
       deepseek: {
         label: 'DeepSeek',
         baseUrl: 'https://api.deepseek.com',
-        hint: '官方 DeepSeek API (V3/R1)',
+        hint: '官方 DeepSeek API (V4)',
         models: [
-          { value: 'deepseek-v3.2', label: 'deepseek-v3.2' },
-          { value: 'deepseek-chat', label: 'deepseek-chat' },
-          { value: 'deepseek-reasoner', label: 'deepseek-reasoner' }
+          { value: 'deepseek-v4-pro', label: 'deepseek-v4-pro (最新)' },
+          { value: 'deepseek-v4-flash', label: 'deepseek-v4-flash' },
+          { value: 'deepseek-chat', label: 'deepseek-chat (即将弃用)' },
+          { value: 'deepseek-reasoner', label: 'deepseek-reasoner (即将弃用)' },
+          { value: '__custom__', label: '自定义模型名称…' }
         ]
       },
       siliconflow: {
@@ -2823,7 +3017,7 @@
         baseUrl: 'https://api.siliconflow.cn/v1',
         hint: '国内首选聚合加速器，极其丰富',
         models: [
-          { value: 'deepseek-ai/DeepSeek-V3', label: 'DeepSeek-V3' },
+          { value: 'deepseek-ai/DeepSeek-V4', label: 'DeepSeek-V4' },
           { value: 'deepseek-ai/DeepSeek-R1', label: 'DeepSeek-R1' },
           { value: 'Pro/deepseek-ai/DeepSeek-R1', label: 'DeepSeek-R1-Pro (高速)' },
           { value: 'Qwen/Qwen2.5-72B-Instruct', label: 'Qwen2.5-72B' },
@@ -3059,17 +3253,23 @@
           customInput.style.display = savedModel ? 'block' : 'none';
         }
 
-        // 密钥提示
+        // 密钥提示 —— 将遮罩密钥填入输入框
         document.getElementById('config-projects-dir').value = data.projectsDir || '';
-        const hintEl = document.getElementById('api-key-hint');
-        if (data.apiKey && data.apiKey.length > 8) {
-          hintEl.textContent = `当前密钥: ${data.apiKey.slice(0, 6)}••••••••${data.apiKey.slice(-4)}`;
+        const apiKeyInput = document.getElementById('config-api-key');
+        if (data.apiKey && data.apiKey.length > 10) {
+          const masked = data.apiKey.slice(0, 8) + '••••••••' + data.apiKey.slice(-6);
+          apiKeyInput.value = masked;
+          apiKeyInput.dataset.masked = 'true';
+          apiKeyInput.dataset.maskedValue = masked;
+          apiKeyInput.type = 'text';
         } else {
-          hintEl.textContent = data.apiKey ? '当前密钥: 已设置' : '';
+          apiKeyInput.value = '';
+          apiKeyInput.dataset.masked = 'false';
+          apiKeyInput.type = 'password';
         }
 
         // 当前摘要
-        const maskedKey = data.apiKey ? `${data.apiKey.slice(0, 4)}****${data.apiKey.slice(-4)}` : '未配置';
+        const maskedKey = data.apiKey ? `${data.apiKey.slice(0, 8)}****${data.apiKey.slice(-6)}` : '未配置';
         document.getElementById('current-config').innerHTML = `
           <div class="terminal-line"><span class="terminal-output">📂 存储路径: ${data.projectsDir || '默认'}</span></div>
           <div class="terminal-line"><span class="terminal-output">🤖 模型: ${data.model || '未配置'}</span></div>
@@ -3081,7 +3281,8 @@
 
     async function saveConfig() {
       const baseUrl = document.getElementById('config-base-url').value.trim();
-      const apiKey = document.getElementById('config-api-key').value.trim();
+      const apiKeyInput = document.getElementById('config-api-key');
+      const apiKeyRaw = apiKeyInput.value.trim();
       const model = currentModelVal === '__custom__' ? document.getElementById('config-model-custom').value.trim() : currentModelVal;
       const projectsDir = document.getElementById('config-projects-dir').value.trim();
 
@@ -3090,16 +3291,80 @@
         return;
       }
 
-      // 直接保存当前选中的 Provider 标识
       const provider = currentProviderVal;
+      const body = { provider, baseUrl, model, projectsDir };
+      // 只在用户输入了新密钥时才发送（掩码值不发送）
+      if (apiKeyRaw && apiKeyInput.dataset.masked !== 'true') {
+        body.apiKey = apiKeyRaw;
+      }
 
       try {
-        await api('/config', 'POST', { provider, baseUrl, apiKey, model, projectsDir });
+        await api('/config', 'POST', body);
         showToast('配置保存成功！');
+        apiKeyInput.value = '';
+        apiKeyInput.dataset.masked = 'false';
+        apiKeyInput.type = 'password';
         loadConfig();
       } catch (e) { showToast('保存失败: ' + e.message, 'error'); }
     }
-    
+
+    // API Key 输入框聚焦时清除掩码，允许输入新密钥
+    document.getElementById('config-api-key').addEventListener('focus', function() {
+      if (this.dataset.masked === 'true') {
+        this.value = '';
+        this.dataset.masked = 'false';
+        this.type = 'password';
+      }
+    });
+
+    document.getElementById('btn-select-projects-dir').addEventListener('click', async function() {
+      const currentDir = document.getElementById('config-projects-dir').value.trim();
+      try {
+        let selectedPath = null;
+        if (window.electronAPI && window.electronAPI.selectFolder) {
+          const result = await window.electronAPI.selectFolder(currentDir || undefined);
+          if (result.canceled) return;
+          selectedPath = result.path;
+        } else {
+          showToast('当前环境不支持文件夹选择，请手动输入路径', 'error');
+          return;
+        }
+        if (!selectedPath) return;
+        const oldPath = currentDir;
+        document.getElementById('config-projects-dir').value = selectedPath;
+        if (oldPath && oldPath !== selectedPath) {
+          showToast('正在迁移旧数据到新路径...', 'info');
+          try {
+            const result = await api('/migrate-projects', 'POST', { oldPath, newPath: selectedPath });
+            if (result.success) {
+              showToast(result.message || '数据迁移完成');
+            } else {
+              showToast('迁移失败: ' + (result.error || '未知错误'), 'error');
+            }
+          } catch (e) {
+            showToast('迁移失败: ' + e.message, 'error');
+          }
+        }
+      } catch (e) { showToast('选择文件夹失败: ' + e.message, 'error'); }
+    });
+
+    document.getElementById('btn-open-projects-dir').addEventListener('click', async function() {
+      const folderPath = document.getElementById('config-projects-dir').value.trim();
+      if (!folderPath) {
+        showToast('项目存储路径为空，请先配置路径', 'error');
+        return;
+      }
+      try {
+        if (window.electronAPI && window.electronAPI.openFolder) {
+          const result = await window.electronAPI.openFolder(folderPath);
+          if (!result.success) showToast(result.error || '打开失败', 'error');
+        } else {
+          const resp = await api('/open-folder', 'POST', { folderPath });
+          if (!resp.success) showToast(resp.error || '打开失败', 'error');
+        }
+      } catch (e) { showToast('打开文件夹失败: ' + e.message, 'error'); }
+    });
+
     // Terminal
     function handleTerminalInput(e) {
       if (e.key === 'Enter') {
@@ -3230,6 +3495,11 @@
       
       const btn = document.getElementById('theme-toggle');
       if (btn) btn.innerHTML = newTheme === 'dark' ? '🌙' : '☀️';
+
+      // 桌面 EXE 模式：同步通知 Electron 主进程更新原生标题栏颜色
+      if (typeof IS_DESKTOP !== 'undefined' && IS_DESKTOP && window.electronAPI) {
+        window.electronAPI.setTitleBarTheme(newTheme);
+      }
     }
     
     // Initialize Theme
@@ -3237,9 +3507,40 @@
     document.documentElement.setAttribute('data-theme', savedTheme);
     const themeBtn = document.getElementById('theme-toggle');
     if (themeBtn) themeBtn.innerHTML = savedTheme === 'dark' ? '🌙' : '☀️';
+    // 桌面模式：页面加载时同步初始主题到标题栏
+    if (window.electronAPI) {
+      window.electronAPI.setTitleBarTheme(savedTheme);
+    }
 
     // Initialize App With Auth Check
+    const IS_DESKTOP = navigator.userAgent.includes('InkOS-Desktop');
+
     async function initApp() {
+      // 桌面 EXE 模式：自动登录，直接跳过首页
+      if (IS_DESKTOP) {
+        try {
+          const meRes = await fetch('/api/auth/me');
+          if (meRes.ok) {
+            const data = await meRes.json();
+            currentUser = data.user;
+          } else {
+            const loginRes = await fetch('/api/auth/desktop-auto-login', { method: 'POST' });
+            const loginData = await loginRes.json();
+            if (!loginRes.ok) throw new Error(loginData.error || '自动登录失败');
+            currentUser = loginData.user;
+          }
+          document.getElementById('user-email-display').textContent = '本地用户';
+          document.getElementById('user-avatar').textContent = '🖥';
+          showMainApp();
+          loadDashboard();
+          loadBookSelects().then(() => { checkActiveWriting(); });
+        } catch (err) {
+          showToast('启动失败: ' + err.message, 'error');
+        }
+        return;
+      }
+
+      // Web 模式：标准 Auth 流程
       try {
         const res = await fetch('/api/auth/me');
         if (res.ok) {
@@ -3247,20 +3548,6 @@
           currentUser = data.user;
           document.getElementById('user-email-display').textContent = currentUser.email;
           document.getElementById('user-avatar').textContent = currentUser.email.charAt(0).toUpperCase();
-          
-          // Guest Mode Detection & UI Toggle
-          if (currentUser.id.startsWith('guest_')) {
-            const guestBanner = document.createElement('div');
-            guestBanner.className = 'guest-banner';
-            guestBanner.id = 'guest-banner';
-            guestBanner.style.display = 'flex';
-            guestBanner.innerHTML = `
-              <div>✨ 您当前处于<b>游客体验模式</b>，数据将在 2 小时后自动清理。</div>
-              <div><a onclick="navigateTo('books')">及时刷新</a> &nbsp; | &nbsp; <a onclick="navigateTo('books')">导出 ZIP 永久保存到本地</a></div>
-            `;
-            document.querySelector('.main').prepend(guestBanner);
-          }
-
           showMainApp();
           loadDashboard();
           loadBookSelects().then(() => {
@@ -3293,8 +3580,82 @@
       }
     }
 
+    // ═══ 客户端下载 ═══
+    async function handleDownloadClient() {
+      try {
+        const resp = await fetch('/api/download/client-info');
+        const info = await resp.json();
+        if (!info.available) {
+          showToast('客户端安装包暂未发布，请稍后再试！', 'info');
+          return;
+        }
+        showToast(`正在下载 InkOS Studio v${info.version} (${info.sizeLabel})...`, 'success');
+        const a = document.createElement('a');
+        a.href = '/api/download/client';
+        a.download = info.filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } catch (e) {
+        showToast('下载失败，请稍后重试', 'error');
+      }
+    }
+
+    // ═══ 广告系统（预留插槽） ═══
+    const ADS_CONFIG = {
+      enabled: false,
+      slots: {
+        'dashboard-banner': { provider: '', slotId: '', format: 'banner' },
+        'write-sidebar': { provider: '', slotId: '', format: 'rectangle' },
+        'books-footer': { provider: '', slotId: '', format: 'banner' }
+      }
+    };
+
+    function loadAd(slotName, containerId) {
+      if (!ADS_CONFIG.enabled) return;
+      const slot = ADS_CONFIG.slots[slotName];
+      if (!slot || !slot.provider || !slot.slotId) return;
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+      if (slot.provider === 'adsense') {
+        const ins = document.createElement('ins');
+        ins.className = 'adsbygoogle';
+        ins.style.display = 'block';
+        ins.setAttribute('data-ad-client', slot.slotId);
+        ins.setAttribute('data-ad-format', slot.format);
+        container.appendChild(ins);
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    }
+
     // Start App
     initApp();
+
+    // Electron specific UI changes
+    if (IS_DESKTOP) {
+      const desktopBtn = document.querySelector('.btn-download-desktop');
+      if (desktopBtn) desktopBtn.style.display = 'none';
+    }
+
+    // Custom Title Bar (Desktop only)
+    if (IS_DESKTOP && window.electronAPI) {
+      document.getElementById('custom-titlebar').style.display = 'flex';
+      document.getElementById('main-app').style.paddingTop = '32px';
+
+      document.getElementById('win-btn-min').addEventListener('click', () => window.electronAPI.windowMinimize());
+      document.getElementById('win-btn-max').addEventListener('click', () => window.electronAPI.windowMaximize());
+      document.getElementById('win-btn-close').addEventListener('click', () => window.electronAPI.windowClose());
+
+      function updateMaxBtn(isMax) {
+        document.getElementById('win-icon-max').style.display = isMax ? 'none' : '';
+        document.getElementById('win-icon-restore').style.display = isMax ? '' : 'none';
+        document.getElementById('win-btn-max').title = isMax ? '还原' : '最大化';
+      }
+
+      window.electronAPI.windowIsMaximized().then(updateMaxBtn);
+      window.electronAPI.onWindowMaximizeChanged(updateMaxBtn);
+    }
   </script>
 </body>
 </html>

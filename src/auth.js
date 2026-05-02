@@ -10,11 +10,11 @@
 import { randomBytes, scryptSync, createCipheriv, createDecipheriv } from 'crypto';
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
-import { homedir } from 'os';
+import { homedir, tmpdir } from 'os';
 
 const INKOS_HOME = process.env.INKOS_HOME || join(homedir(), '.inkos');
 const USERS_FILE = join(INKOS_HOME, 'users.json');
-const GUESTS_DIR = join(INKOS_HOME, 'temp_guests');
+const GUESTS_DIR = join(tmpdir(), 'inkos-guests');
 const SECRET_KEY_FILE = join(INKOS_HOME, 'server-secret.key');
 
 // ═══════════════════════════════════════════════════════════════
@@ -23,7 +23,9 @@ const SECRET_KEY_FILE = join(INKOS_HOME, 'server-secret.key');
 
 /** 获取或自动生成 AES 主密钥（32 字节 = AES-256） */
 function getServerSecret() {
-  if (!existsSync(INKOS_HOME)) mkdirSync(INKOS_HOME, { recursive: true });
+  if (!existsSync(INKOS_HOME)) {
+    try { mkdirSync(INKOS_HOME, { recursive: true }); } catch (_) {}
+  }
 
   if (existsSync(SECRET_KEY_FILE)) {
     return readFileSync(SECRET_KEY_FILE);
@@ -36,6 +38,44 @@ function getServerSecret() {
 }
 
 const SERVER_SECRET = getServerSecret();
+
+// 预创建游客目录，避免运行时 EPERM
+try {
+  ensureDirSync(GUESTS_DIR);
+} catch (e) {
+  console.warn('[AUTH] 游客目录预创建失败（网页端游客模式可能受影响）:', e.message);
+}
+
+// 强健的目录创建 — 兼容 Windows EPERM (Windows Defender 文件锁)
+export function ensureDirSync(dir) {
+  if (existsSync(dir)) return;
+  try {
+    mkdirSync(dir, { recursive: true });
+    return;
+  } catch (e) {
+    if (!(process.platform === 'win32' && (e.code === 'EPERM' || e.code === 'EACCES'))) {
+      if (e.code !== 'EEXIST') console.warn('[AUTH] ensureDirSync 失败:', dir, e.message);
+      return;
+    }
+  }
+  // Windows EPERM 逐级创建 — 每级之间等待 Windows Defender 释放文件锁
+  const parts = dir.replace(/\//g, '\\').split('\\');
+  let current = parts[0] + '\\' + parts[1];
+  for (let i = 2; i < parts.length; i++) {
+    current = current + '\\' + parts[i];
+    if (existsSync(current)) continue;
+    for (let retry = 0; retry < 5; retry++) {
+      try {
+        mkdirSync(current);
+        break;
+      } catch (e) {
+        if (e.code === 'EPERM' || e.code === 'EACCES') {
+          const t = Date.now(); while (Date.now() - t < 50 * (retry + 1)) {}
+        } else if (e.code !== 'EEXIST') { break; }
+      }
+    }
+  }
+}
 
 // ═══════════════════════════════════════════════════════════════
 // 密码哈希（不可逆 — scrypt）
@@ -98,7 +138,9 @@ function loadUsers() {
 }
 
 function saveUsers(users) {
-  if (!existsSync(INKOS_HOME)) mkdirSync(INKOS_HOME, { recursive: true });
+  if (!existsSync(INKOS_HOME)) {
+    try { mkdirSync(INKOS_HOME, { recursive: true }); } catch (_) {}
+  }
   writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
 }
 
@@ -136,7 +178,7 @@ export function createUser(email, password) {
 
   // 创建用户数据目录
   const userDir = getUserDataDir(userId);
-  mkdirSync(join(userDir, 'projects', 'default'), { recursive: true });
+  ensureDirSync(join(userDir, 'projects', 'default'));
 
   console.log(`[AUTH] 新用户注册: ${normalizedEmail} (${userId})`);
   return user;
@@ -155,7 +197,7 @@ export function getUserDataDir(userId) {
 
 export function getUserProjectsDir(userId) {
   const dir = join(getUserDataDir(userId), 'projects');
-  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+  ensureDirSync(dir);
   return dir;
 }
 
@@ -190,9 +232,12 @@ export function createGuestSession() {
   const guestId = `guest_${randomBytes(4).toString('hex')}`;
   const token = createSession(guestId, null, true);
   
-  // Ensure the guest directory exists immediately
-  const guestDir = getUserDataDir(guestId);
-  mkdirSync(join(guestDir, 'projects', 'default'), { recursive: true });
+  try {
+    const guestDir = getUserDataDir(guestId);
+    ensureDirSync(join(guestDir, 'projects', 'default'));
+  } catch (e) {
+    console.warn(`[AUTH] 游客目录创建失败 (${guestId}):`, e.message);
+  }
   
   return { token, guestId };
 }
@@ -243,7 +288,7 @@ export function requireAuth(req, res, next) {
     // 如果是 API 请求且没有 Session，自动分配一个（支持无感体验）
     const { token: guestToken, guestId } = createGuestSession();
     // 关键修复：确保在 API 响应中设置 Cookie，这样后续请求就能携带它
-    res.setHeader('Set-Cookie', `inkos_session=${guestToken}; HttpOnly; Path=/; Max-Age=${2 * 3600}; SameSite=None; Secure`);
+    res.setHeader('Set-Cookie', `inkos_session=${guestToken}; HttpOnly; Path=/; Max-Age=${2 * 3600}; SameSite=Lax`);
     session = { userId: guestId, email: 'guest@example.com', isGuest: true };
     console.log(`[AUTH] 无感模式自动分配游客身份: ${guestId}`);
   }

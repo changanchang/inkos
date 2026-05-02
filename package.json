@@ -1,12 +1,14 @@
 {
   "name": "inkos-studio",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "InkOS 的可视化 Web 界面 - 自动化小说写作管理平台",
   "type": "module",
   "scripts": {
     "dev": "node src/server.js",
     "start": "node src/server.js",
-    "build": "echo 'No build step required'"
+    "build": "echo 'No build step required'",
+    "dev:desktop": "electron .",
+    "build:desktop": "electron-builder --win --x64"
   },
   "repository": {
     "type": "git",
@@ -27,14 +29,62 @@
   },
   "homepage": "https://github.com/changanchang/inkos-studio#readme",
   "dependencies": {
+    "@actalk/inkos": "latest",
     "adm-zip": "^0.5.17",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "multer": "^2.1.1",
-    "ws": "^8.14.2",
-    "@actalk/inkos": "latest"
+    "ws": "^8.14.2"
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "main": "electron-main.cjs",
+  "build": {
+    "appId": "com.inkos.studio",
+    "productName": "InkOS Studio",
+    "asar": false,
+    "directories": {
+      "output": "dist_desktop"
+    },
+    "files": [
+      "**/*",
+      "!node_modules/electron/**",
+      "!node_modules/electron-builder/**",
+      "!node_modules/app-builder-bin/**",
+      "!node_modules/app-builder-lib/**",
+      "!node_modules/builder-util/**",
+      "!node_modules/builder-util-node/**",
+      "!node_modules/7zip-bin/**",
+      "!node_modules/7zip-min/**",
+      "!node_modules/electron-winstaller/**",
+      "!node_modules/electron-publish/**",
+      "!node_modules/electron-notarize/**",
+      "!node_modules/dmg-builder/**",
+      "!node_modules/@electron/**",
+      "!**/node_modules/**/{test,tests,docs,example,examples,__tests__,benchmark}/**",
+      "!**/node_modules/**/*.md",
+      "!**/node_modules/**/*.markdown",
+      "!**/node_modules/**/*.map",
+      "!**/node_modules/**/*.d.ts",
+      "**/node_modules/@actalk/inkos-core/genres/**/*.md",
+      "!**/node_modules/**/.bin/**",
+      "!dist_desktop",
+      "!temp_guests",
+      "!.inkos",
+      "!debug_write.mjs",
+      "!Dockerfile",
+      "!README.md",
+      "!LICENSE",
+      "!.gitignore"
+    ],
+    "win": {
+      "target": "portable",
+      "signAndEditExecutable": false
+    }
+  },
+  "devDependencies": {
+    "electron": "^41.2.1",
+    "electron-builder": "^26.8.1"
   }
 }
